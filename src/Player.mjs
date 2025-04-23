@@ -8,7 +8,7 @@
 
 import Gameboard from './Gameboard';
 
-class Player {
+export default class Player {
   constructor() {
     this.gameboard = new Gameboard();
   }
