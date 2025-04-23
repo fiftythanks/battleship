@@ -4,6 +4,9 @@ import Battleship from './Battleship';
 describe('Gameboard class', () => {
   const gameboard = new Gameboard();
 
+  // ADD TEST CASE FOR PATROL BOATS!!!
+  // AND MAKE IT IMPOSSIBLE TO PLACE SEVERAL SHIPS OF THE SAME TYPE
+
   it('throws if given incorrect input', () => {
     expect(() => gameboard.placeShip('C', 1, 'C', '4')).toThrow();
     expect(() => gameboard.placeShip({ C: 1 }, { C: 4 })).toThrow();
