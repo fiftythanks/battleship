@@ -66,3 +66,54 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+/* My styles */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.boards {
+  display: flex;
+  gap: 10rem;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+h2 {
+  padding-left: 3rem;
+}
+.board {
+  display: flex;
+  flex-direction: column;
+}
+.row,
+.cols {
+  height: 3rem;
+  flex-shrink: 0;
+  display: flex;
+}
+.square {
+  width: 3rem;
+  flex-shrink: 0;
+  outline: 1px solid black;
+}
+.num,
+.letter,
+.empty {
+  width: 3rem;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+p:has(.turn) {
+  font-size: 1.5rem;
+}
+.square.occupied {
+  background-color: black;
+}
