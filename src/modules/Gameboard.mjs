@@ -56,20 +56,41 @@ export default class Gameboard {
     this.patrolBoat = null;
   }
 
-  // col parameters are not indices of elements in rows, they are column indices on the board as pictured above; row parameters are letters from A to J.
-  placeShip([row1, col1], [row2, col2]) {
+  // coord = [row, col]; col parameters are not indices of elements in rows, they are column indices on the board as pictured above; row parameters are letters from A to J.
+  placeShip(coord1, coord2) {
+    if (!Array.isArray(coord1) || coord1.length !== 2) {
+      throw new TypeError(
+        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, first of which is a capital English alphabet letter from A to J, and second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
+      );
+    }
+    const [row1, col1] = coord1;
+    let row2;
+    let col2;
+
+    if (Array.isArray(coord2) && coord2.length === 2) {
+      [row2, col2] = coord2;
+    } else if (coord2 === undefined) {
+      row2 = undefined;
+      col2 = undefined;
+    } else {
+      throw new TypeError(
+        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, first of which is a capital English alphabet letter from A to J, and second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
+      );
+    }
+
     if (
       !letters.includes(row1) ||
-      !letters.includes(row2) ||
       typeof col1 !== 'number' ||
       !Number.isInteger(col1) ||
       col1 < 1 ||
       col1 > 10 ||
-      typeof col2 !== 'number' ||
-      !Number.isInteger(col2) ||
-      col2 < 1 ||
-      col2 > 10 ||
-      (row1 !== row2 && col1 !== col2)
+      ((row2 !== undefined || col2 !== undefined) &&
+        (!letters.includes(row2) ||
+          typeof col2 !== 'number' ||
+          !Number.isInteger(col2) ||
+          col2 < 1 ||
+          col2 > 10 ||
+          (row1 !== row2 && col1 !== col2)))
     ) {
       throw new Error(
         "Incorrect coordinates. Input must be in the form ([row1, col1], [row2, col2]), where row1, row2 are letters from A to J and col1, col2 are integers from 1 to 10. Ships must be places in one row or in one column, therefore if col1 isn't equal to col2, then row1 = row2, and if row1 isn't equal to row2, then col1 = col2.",
@@ -78,7 +99,24 @@ export default class Gameboard {
 
     let ship;
 
-    if (row1 === row2) {
+    if (row2 === undefined && col2 === undefined) {
+      const row = this.rows[`${row1}`];
+      const col = col1;
+
+      if (row[col - 1].occupiedBy !== null) return null;
+
+      const type = 'patrolBoat';
+      if (this[`${type}`] !== null) {
+        throw new Error(
+          `A ship of type ${type} is already present on the board.`,
+        );
+      }
+
+      const length = 1;
+      ship = new Battleship(length);
+      this[`${type}`] = ship;
+      row[col - 1].occupiedBy = ship;
+    } else if (row1 === row2) {
       const row = this.rows[`${row1}`];
 
       // Check if the squares are already occupied
@@ -135,6 +173,34 @@ export default class Gameboard {
       }
 
       const length = letters.indexOf(row2) - letters.indexOf(row1) + 1;
+
+      let type;
+      switch (length) {
+        case 5:
+          type = 'carrier';
+          break;
+        case 4:
+          type = 'battleship';
+          break;
+        case 3:
+          type = 'destroyer';
+          break;
+        case 2:
+          type = 'submarine';
+          break;
+        case 1:
+          type = 'patrolBoat';
+          break;
+        default:
+        // do nothing
+      }
+
+      if (this[`${type}`] !== null) {
+        throw new Error(
+          `A ship of type ${type} is already present on the board.`,
+        );
+      }
+
       ship = new Battleship(length);
       for (
         let row = letters.indexOf(row1);

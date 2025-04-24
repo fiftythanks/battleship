@@ -4,9 +4,6 @@ import Battleship from './Battleship';
 describe('Gameboard class', () => {
   const gameboard = new Gameboard();
 
-  // ADD TEST CASE FOR PATROL BOATS!!!
-  // AND MAKE IT IMPOSSIBLE TO PLACE SEVERAL SHIPS OF THE SAME TYPE
-
   it('throws if given incorrect input', () => {
     expect(() => gameboard.placeShip('C', 1, 'C', '4')).toThrow();
     expect(() => gameboard.placeShip({ C: 1 }, { C: 4 })).toThrow();
@@ -39,6 +36,9 @@ describe('Gameboard class', () => {
     expect(gameboard.isOccupied('H', 1)).toBeNull();
     expect(gameboard.isOccupied('I', 1)).toBeNull();
     expect(gameboard.isOccupied('J', 1)).toBeNull();
+
+    // Patrol boats
+    expect(() => gameboard.placeShip(['J', 4])).not.toThrow();
   });
 
   test('when placing a ship, it checks if the specified squares are already occupied, and if so, the placeShip() method returns null. Otherwise, the method returns a reference to the instance of Battleship that was placed.', () => {
@@ -90,6 +90,7 @@ describe('Gameboard class', () => {
     gameboard.receiveAttack('E', 3);
     gameboard.receiveAttack('E', 4);
     gameboard.receiveAttack('E', 5);
+    gameboard.receiveAttack('J', 4);
 
     expect(gameboard.areAllSunk()).toBe(true);
   });
