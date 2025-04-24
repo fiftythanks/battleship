@@ -1,8 +1,16 @@
 import './style.css';
 import Game from './modules/Game';
 
-function initialize() {
-  const game = new Game();
+const initialForm = document.querySelector('form');
+const boards = document.querySelector('.boards');
+const playerOneLabel = document.querySelector('.player-one h2');
+const playerTwoLabel = document.querySelector('.player-two h2');
+
+const whoseTurnWrapper = document.querySelector('p:has(.turn)');
+const whoseTurnDOM = document.querySelector('.turn');
+
+function initialize(playerOneName, playerTwoName) {
+  const game = new Game(playerOneName, playerTwoName);
 
   game.P1PlaceShip(['B', 1], ['F', 1]);
   game.P1PlaceShip(['C', 4], ['C', 7]);
@@ -34,8 +42,6 @@ function initialize() {
   );
 
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-  const whoseTurnWrapper = document.querySelector('p:has(.turn)');
-  const whoseTurnDOM = document.querySelector('.turn');
 
   for (let i = 0; i < 10; i += 1) {
     const letter = letters[i];
@@ -64,11 +70,11 @@ function initialize() {
             playerOneBoardEnemy.style.display = 'none';
 
             if (game.winner === null) {
-              whoseTurnDOM.textContent = game.P1Name;
+              whoseTurnDOM.textContent = playerOneName;
               playerTwoBoard.style.display = 'none';
               playerTwoBoardEnemy.style.display = 'flex';
             } else {
-              whoseTurnWrapper.textContent = `${game.P2Name} wins!`;
+              whoseTurnWrapper.textContent = `${playerTwoName} wins!`;
             }
 
             playerOneBoard.style.display = 'flex';
@@ -97,11 +103,11 @@ function initialize() {
             playerTwoBoardEnemy.style.display = 'none';
 
             if (game.winner === null) {
-              whoseTurnDOM.textContent = game.P2Name;
+              whoseTurnDOM.textContent = playerTwoName;
               playerOneBoard.style.display = 'none';
               playerOneBoardEnemy.style.display = 'flex';
             } else {
-              whoseTurnWrapper.textContent = `${game.P1Name} wins!`;
+              whoseTurnWrapper.textContent = `${playerOneName} wins!`;
             }
 
             playerTwoBoard.style.display = 'flex';
@@ -114,4 +120,17 @@ function initialize() {
   }
 }
 
-initialize();
+initialForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const playerOneNameInput = initialForm.querySelector('#name-one');
+  const playerOneName = playerOneNameInput.value;
+  const playerTwoNameInput = initialForm.querySelector('#name-two');
+  const playerTwoName = playerTwoNameInput.value;
+  initialForm.style.display = 'none';
+  playerOneLabel.textContent = playerOneName;
+  playerTwoLabel.textContent = playerTwoName;
+  boards.style = null;
+  whoseTurnWrapper.style = null;
+  whoseTurnDOM.textContent = playerOneName;
+  initialize(playerOneName, playerTwoName);
+});

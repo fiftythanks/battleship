@@ -74,6 +74,29 @@ body {
   align-items: center;
   gap: 1rem;
 }
+button:hover {
+  cursor: pointer;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  & button {
+    align-self: center;
+    padding: 0.2rem 3rem;
+  }
+}
+.players-form {
+  display: flex;
+  gap: 3rem;
+}
+.player-form {
+  display: flex;
+  flex-direction: column;
+  & h2 {
+    align-self: center;
+  }
+}
 .boards {
   display: flex;
   gap: 10rem;
@@ -83,24 +106,24 @@ body {
     align-items: center;
   }
 }
-h2 {
-  padding-left: 3rem;
-}
-.player1 .board {
+.player-one .board {
   display: flex;
   flex-direction: column;
 }
-.player2 .board {
+.player-two .board {
   display: none;
   flex-direction: column;
 }
-.player1 .board-enemy {
+.player-one .board-enemy {
   display: none;
   flex-direction: column;
 }
-.player2 .board-enemy {
+.player-two .board-enemy {
   display: flex;
   flex-direction: column;
+}
+.board-enemy .square:hover {
+  cursor: pointer;
 }
 .row,
 .cols {

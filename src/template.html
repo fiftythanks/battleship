@@ -7,8 +7,23 @@
   </head>
   <body>
     <h1>Battleship</h1>
-    <div class="boards">
-      <div class="player1">
+    <form>
+      <div class="players-form">
+        <div class="player-form">
+          <h2>Player 1</h2>
+          <label for="name-one" name="name-one">Name</label>
+          <input type="text" id="name-one" placeholder="Player 1" required />
+        </div>
+        <div class="player-form">
+          <h2>Player 2</h2>
+          <label for="name-two" name="name-two">Name</label>
+          <input type="text" id="name-two" placeholder="Player 2" required />
+        </div>
+      </div>
+      <button type="submit">Start</button>
+    </form>
+    <div class="boards" style="display: none">
+      <div class="player-one">
         <h2>Player 1</h2>
         <div class="board">
           <div class="cols">
@@ -301,7 +316,7 @@
           </div>
         </div>
       </div>
-      <div class="player2">
+      <div class="player-two">
         <h2>Player 2</h2>
         <div class="board">
           <div class="cols">
@@ -595,6 +610,8 @@
         </div>
       </div>
     </div>
-    <p class="turn-wrapper">Turn: <span class="turn">Player1</span></p>
+    <p class="turn-wrapper" style="display: none">
+      Turn: <span class="turn">Player 1</span>
+    </p>
   </body>
 </html>
