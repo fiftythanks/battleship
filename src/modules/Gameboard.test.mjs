@@ -94,4 +94,14 @@ describe('Gameboard class', () => {
 
     expect(gameboard.areAllSunk()).toBe(true);
   });
+
+  it('can tell if a square has been hit/missed', () => {
+    const board = new Gameboard();
+
+    expect(board.wasAttacked).toBeDefined();
+    expect(board.wasAttacked('B', 4)).toBe(false);
+
+    board.receiveAttack('B', 4);
+    expect(board.wasAttacked('B', 4)).toBe(true);
+  });
 });

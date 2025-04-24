@@ -41,6 +41,7 @@ export default class Gameboard {
       }
       this.rows[`${letters[i]}`] = row;
     }
+
     this.misses = [];
     this.hits = [];
 
@@ -52,7 +53,7 @@ export default class Gameboard {
     this.destroyer = null;
     // 2 squares
     this.submarine = null;
-    // 1 squares
+    // 1 square
     this.patrolBoat = null;
   }
 
@@ -250,7 +251,7 @@ export default class Gameboard {
       this.misses.filter((coord) => coord[0] === row && coord[1] === col)
         .length > 0
     ) {
-      throw new Error(`Square (${row}, ${col}) has already been hit.`);
+      throw new Error(`Square (${row}, ${col}) has already been attacked.`);
     }
 
     const occupation = this.isOccupied(row, col);
@@ -271,5 +272,32 @@ export default class Gameboard {
     if (this.submarine !== null && !this.submarine.isSunk()) return false;
     if (this.patrolBoat !== null && !this.patrolBoat.isSunk()) return false;
     return true;
+  };
+
+  isFleetFull = () => {
+    if (this.carrier === null) return false;
+    if (this.battleship === null) return false;
+    if (this.destroyer === null) return false;
+    if (this.submarine === null) return false;
+    if (this.patrolBoat === null) return false;
+    return true;
+  };
+
+  wasAttacked = (row, col) => {
+    if (
+      this.isOccupied(row, col) &&
+      this.hits.filter((coord) => coord[0] === row && coord[1] === col).length >
+        0
+    ) {
+      return true;
+    }
+    if (
+      !this.isOccupied(row, col) &&
+      this.misses.filter((coord) => coord[0] === row && coord[1] === col)
+        .length > 0
+    ) {
+      return true;
+    }
+    return false;
   };
 }
