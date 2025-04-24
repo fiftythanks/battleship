@@ -1,22 +1,16 @@
 import Player from './Player';
 
-function populateBoard(board) {
-  board.placeShip(['B', 1], ['F', 1]);
-  board.placeShip(['C', 4], ['C', 7]);
-  board.placeShip(['E', 3], ['E', 5]);
-  board.placeShip(['G', 6], ['H', 6]);
-  board.placeShip(['J', 4]);
-}
-
 export default class Game {
   constructor(name1 = 'Player1', name2 = 'Player2') {
     this.playerOne = new Player(name1);
     this.playerTwo = new Player(name2);
-    populateBoard(this.playerOne.gameboard);
-    populateBoard(this.playerTwo.gameboard);
     this.whoseTurn = this.playerOne;
     this.winner = null;
   }
+
+  P1PlaceShip = (coord1, coord2) => this.playerOne.placeShip(coord1, coord2);
+
+  P2PlaceShip = (coord1, coord2) => this.playerTwo.placeShip(coord1, coord2);
 
   attackPlayerOne = (row, col) => this.playerOne.receiveAttack(row, col);
 
