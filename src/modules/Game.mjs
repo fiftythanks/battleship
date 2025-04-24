@@ -57,4 +57,8 @@ export default class Game {
   get isP2FleetFull() {
     return this.playerTwo.isFleetFull();
   }
+
+  P1WasAttacked = (row, col) => this.playerOne.wasAttacked(row, col);
+
+  P2WasAttacked = (row, col) => this.playerTwo.wasAttacked(row, col);
 }
