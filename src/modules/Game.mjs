@@ -12,21 +12,26 @@ export default class Game {
 
   P2PlaceShip = (coord1, coord2) => this.playerTwo.placeShip(coord1, coord2);
 
-  attackPlayerOne = (row, col) => this.playerOne.receiveAttack(row, col);
+  #attackPlayerOne = (row, col) => this.playerOne.receiveAttack(row, col);
 
-  attackPlayerTwo = (row, col) => this.playerTwo.receiveAttack(row, col);
+  #attackPlayerTwo = (row, col) => this.playerTwo.receiveAttack(row, col);
 
   makeTurn = (row, col) => {
     if (this.winner === null) {
       // if miss, it's null, if hit a ship, it's the ship object
-      const hitResult = this.whoseTurn.attack(row, col);
+      let hitResult;
+
       if (this.whoseTurn === this.playerOne) {
+        hitResult = this.#attackPlayerTwo(row, col);
+
         if (this.playerTwo.hasLost()) {
           this.winner = this.playerOne;
         } else {
           this.whoseTurn = this.playerTwo;
         }
       } else if (this.whoseTurn === this.playerTwo) {
+        hitResult = this.#attackPlayerOne(row, col);
+
         if (this.playerOne.hasLost()) {
           this.winner = this.playerTwo;
         } else {

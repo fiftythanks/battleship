@@ -9,25 +9,12 @@ describe('Game class', () => {
     expect(game.P2PlaceShip(['B', 1], ['F', 1])).toBeInstanceOf(Battleship);
   });
 
-  it('can attack players', () => {
-    expect(game.attackPlayerOne('C', 4)).toBeNull();
-    expect(game.attackPlayerOne('B', 1)).toBeInstanceOf(Battleship);
-
-    expect(game.attackPlayerTwo('C', 4)).toBeNull();
-    expect(game.attackPlayerTwo('B', 1)).toBeInstanceOf(Battleship);
-
-    // Can't attack the same square twice
-    expect(() => game.attackPlayerOne('C', 4)).toThrow();
-    expect(() => game.attackPlayerTwo('C', 4)).toThrow();
-  });
-
   it('can check if a square has been attacked already', () => {
     expect(game.P1WasAttacked('C', 4)).toBe(true);
     expect(game.P1WasAttacked('F', 5)).toBe(false);
     expect(game.P2WasAttacked('C', 4)).toBe(true);
     expect(game.P2WasAttacked('F', 5)).toBe(false);
   });
-
   /* 
     board.placeShip(['B', 1], ['F', 1]);
     board.placeShip(['C', 4], ['C', 7]);
