@@ -12,13 +12,15 @@ export default class Game {
   constructor(name1 = 'Player1', name2 = 'Player2') {
     this.playerOne = new Player(name1);
     this.playerTwo = new Player(name2);
-    this.playerOne.attack = this.playerTwo.receiveAttack;
-    this.playerTwo.attack = this.playerOne.receiveAttack;
     populateBoard(this.playerOne.gameboard);
     populateBoard(this.playerTwo.gameboard);
     this.whoseTurn = this.playerOne;
     this.winner = null;
   }
+
+  attackPlayerOne = (row, col) => this.playerOne.receiveAttack(row, col);
+
+  attackPlayerTwo = (row, col) => this.playerTwo.receiveAttack(row, col);
 
   makeTurn = (row, col) => {
     if (this.winner === null) {
