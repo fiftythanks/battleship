@@ -15,3 +15,6 @@ populateBoard(board1);
 export const player2 = new Player();
 export const board2 = player2.gameboard;
 populateBoard(board2);
+
+player1.attack = board2.receiveAttack;
+player2.attack = board1.receiveAttack;

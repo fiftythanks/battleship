@@ -1,5 +1,5 @@
 import './style.css';
-import { player1, board1, player2, board2 } from './modules/game';
+import { board1, board2, player1, player2 } from './modules/game';
 
 function initialize() {
   const playerOneRows = document.querySelectorAll('.player1 .row');
@@ -12,10 +12,39 @@ function initialize() {
     const playerTwoRow = playerTwoRows[i].querySelectorAll('.square');
 
     for (let j = 0; j < 10; j += 1) {
-      if (board1.isOccupied(`${letter}`, j + 1))
+      if (board1.isOccupied(letter, j + 1)) {
         playerOneRow[j].classList.add('occupied');
-      if (board2.isOccupied(`${letter}`, j + 1))
+      }
+
+      playerOneRow[j].addEventListener('click', () => {
+        try {
+          const output = player2.attack(letter, j + 1);
+          if (output === null) {
+            playerOneRow[j].classList.add('missed');
+          } else if (typeof output === 'object') {
+            playerOneRow[j].classList.add('hit');
+          }
+        } catch (error) {
+          // Implement some kind of logic to explain to the user that you can't hit twice the same square, if he/she tries to click more than one time, like 5 times or more.
+        }
+      });
+
+      if (board2.isOccupied(`${letter}`, j + 1)) {
         playerTwoRow[j].classList.add('occupied');
+      }
+
+      playerTwoRow[j].addEventListener('click', () => {
+        try {
+          const output = player1.attack(letter, j + 1);
+          if (output === null) {
+            playerTwoRow[j].classList.add('missed');
+          } else if (typeof output === 'object') {
+            playerTwoRow[j].classList.add('hit');
+          }
+        } catch (error) {
+          // Implement some kind of logic to explain to the user that you can't hit twice the same square, if he/she tries to click more than one time, like 5 times or more.
+        }
+      });
     }
   }
 }

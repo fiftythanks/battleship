@@ -57,7 +57,7 @@ export default class Gameboard {
   }
 
   // coord = [row, col]; col parameters are not indices of elements in rows, they are column indices on the board as pictured above; row parameters are letters from A to J.
-  placeShip(coord1, coord2) {
+  placeShip = (coord1, coord2) => {
     if (!Array.isArray(coord1) || coord1.length !== 2) {
       throw new TypeError(
         'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, first of which is a capital English alphabet letter from A to J, and second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
@@ -212,9 +212,9 @@ export default class Gameboard {
     }
 
     return ship;
-  }
+  };
 
-  isOccupied(row, col) {
+  isOccupied = (row, col) => {
     if (
       !letters.includes(row) ||
       typeof col !== 'number' ||
@@ -228,9 +228,9 @@ export default class Gameboard {
     }
 
     return this.rows[`${row}`][col - 1].occupiedBy;
-  }
+  };
 
-  receiveAttack(row, col) {
+  receiveAttack = (row, col) => {
     if (
       !letters.includes(row) ||
       typeof col !== 'number' ||
@@ -262,14 +262,14 @@ export default class Gameboard {
     }
 
     return occupation;
-  }
+  };
 
-  areAllSunk() {
+  areAllSunk = () => {
     if (this.carrier !== null && !this.carrier.isSunk()) return false;
     if (this.battleship !== null && !this.battleship.isSunk()) return false;
     if (this.destroyer !== null && !this.destroyer.isSunk()) return false;
     if (this.submarine !== null && !this.submarine.isSunk()) return false;
     if (this.patrolBoat !== null && !this.patrolBoat.isSunk()) return false;
     return true;
-  }
+  };
 }

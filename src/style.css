@@ -117,3 +117,9 @@ p:has(.turn) {
 .square.occupied {
   background-color: black;
 }
+.square.hit {
+  background-color: red;
+}
+.square.missed {
+  background-color: blue;
+}
