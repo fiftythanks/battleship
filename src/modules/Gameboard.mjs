@@ -203,6 +203,8 @@ export default class Gameboard {
       }
 
       ship = new Battleship(length);
+      this[`${type}`] = ship;
+
       for (
         let row = letters.indexOf(row1);
         row <= letters.indexOf(row2);
