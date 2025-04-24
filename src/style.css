@@ -86,7 +86,19 @@ body {
 h2 {
   padding-left: 3rem;
 }
-.board {
+.player1 .board {
+  display: flex;
+  flex-direction: column;
+}
+.player2 .board {
+  display: none;
+  flex-direction: column;
+}
+.player1 .board-enemy {
+  display: none;
+  flex-direction: column;
+}
+.player2 .board-enemy {
   display: flex;
   flex-direction: column;
 }
