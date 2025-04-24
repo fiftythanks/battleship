@@ -55,4 +55,12 @@ export default class Game {
   get P2Name() {
     return this.playerTwo.name;
   }
+
+  get isP1FleetFull() {
+    return this.playerOne.isFleetFull();
+  }
+
+  get isP2FleetFull() {
+    return this.playerTwo.isFleetFull();
+  }
 }
