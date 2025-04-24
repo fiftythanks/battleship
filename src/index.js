@@ -16,17 +16,21 @@ function initialize() {
   game.P2PlaceShip(['G', 6], ['H', 6]);
   game.P2PlaceShip(['J', 4]);
 
-  const playerOneBoard = document.querySelector('.player1 .board');
-  const playerOneBoardEnemy = document.querySelector('.player1 .board-enemy');
-  const playerOneRows = document.querySelectorAll('.player1 .board .row');
-  const playerOneRowsEnemy = document.querySelectorAll(
-    '.player1 .board-enemy .row',
+  const playerOneBoard = document.querySelector('.player-one .board');
+  const playerOneBoardEnemy = document.querySelector(
+    '.player-one .board-enemy',
   );
-  const playerTwoBoard = document.querySelector('.player2 .board');
-  const playerTwoBoardEnemy = document.querySelector('.player2 .board-enemy');
-  const playerTwoRows = document.querySelectorAll('.player2 .board .row');
+  const playerOneRows = document.querySelectorAll('.player-one .board .row');
+  const playerOneRowsEnemy = document.querySelectorAll(
+    '.player-one .board-enemy .row',
+  );
+  const playerTwoBoard = document.querySelector('.player-two .board');
+  const playerTwoBoardEnemy = document.querySelector(
+    '.player-two .board-enemy',
+  );
+  const playerTwoRows = document.querySelectorAll('.player-two .board .row');
   const playerTwoRowsEnemy = document.querySelectorAll(
-    '.player2 .board-enemy .row',
+    '.player-two .board-enemy .row',
   );
 
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
