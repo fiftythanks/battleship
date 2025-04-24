@@ -9,7 +9,12 @@
 import Gameboard from './Gameboard';
 
 export default class Player {
-  constructor() {
+  constructor(name) {
     this.gameboard = new Gameboard();
+    this.hasLost = this.gameboard.areAllSunk;
+    this.placeShip = this.gameboard.placeShip;
+    this.isOccupied = this.gameboard.isOccupied;
+    this.receiveAttack = this.gameboard.receiveAttack;
+    this.name = name;
   }
 }
