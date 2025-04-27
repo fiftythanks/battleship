@@ -77,7 +77,7 @@ describe('Gameboard class', () => {
   });
 
   test('method `allSunk` returns true if all ships on the board are sunk and false otherwise', () => {
-    expect(gameboard.areAllSunk()).toBe(false);
+    expect(gameboard.areAllSunk).toBe(false);
 
     gameboard.receiveAttack('B', 1);
     gameboard.receiveAttack('C', 1);
@@ -92,7 +92,7 @@ describe('Gameboard class', () => {
     gameboard.receiveAttack('E', 5);
     gameboard.receiveAttack('J', 4);
 
-    expect(gameboard.areAllSunk()).toBe(true);
+    expect(gameboard.areAllSunk).toBe(true);
   });
 
   it('can tell if a square has been hit/missed', () => {
@@ -108,12 +108,93 @@ describe('Gameboard class', () => {
   it('can tell if it has all the five types of ships', () => {
     const board = new Gameboard();
 
-    expect(board.isFleetFull()).toBe(false);
+    expect(board.isFleetFull).toBe(false);
     board.placeShip(['B', 1], ['F', 1]);
     board.placeShip(['C', 4], ['C', 7]);
     board.placeShip(['E', 3], ['E', 5]);
     board.placeShip(['G', 6], ['H', 6]);
     board.placeShip(['J', 4]);
-    expect(board.isFleetFull()).toBe(true);
+    expect(board.isFleetFull).toBe(true);
   });
+
+  /* it('can tell if a ship was hit or if a ship was sunk', () => {
+    const board = new Gameboard();
+
+    board.placeShip(['B', 1], ['F', 1]);
+    board.placeShip(['C', 4], ['C', 7]);
+    board.placeShip(['E', 3], ['E', 5]);
+    board.placeShip(['G', 6], ['H', 6]);
+    board.placeShip(['J', 4]);
+
+    expect(board.isPatrolBoatSunk).toBe(false);
+    expect(board.wasPatrolBoatHit).toBe(false);
+
+    // Hit patrol boat
+    board.receiveAttack('J', 4);
+
+    expect(board.wasPatrolBoatHit).toBe(true);
+    expect(board.isPatrolBoatSunk).toBe(true);
+
+    expect(board.isSubmarineSunk).toBe(false);
+    expect(board.wasSubmarineHit).toBe(false);
+
+    // Hit submarine
+    board.receiveAttack('G', 6);
+
+    expect(board.isSubmarineSunk).toBe(false);
+    expect(board.wasSubmarineHit).toBe(true);
+
+    board.receiveAttack('H', 6);
+
+    expect(board.isSubmarineSunk).toBe(true);
+    expect(board.wasSubmarineHit).toBe(true);
+
+    expect(board.isDestroyerSunk).toBe(false);
+    expect(board.wasDestroyerHit).toBe(false);
+
+    // Hit destroyer
+    board.receiveAttack('E', 3);
+
+    expect(board.isDestroyerSunk).toBe(false);
+    expect(board.wasDestroyerHit).toBe(true);
+
+    board.receiveAttack('E', 4);
+    board.receiveAttack('E', 5);
+
+    expect(board.isDestroyerSunk).toBe(true);
+    expect(board.wasDestroyerHit).toBe(true);
+
+    expect(board.isBattleshipSunk).toBe(false);
+    expect(board.wasBattleshipHit).toBe(false);
+
+    // Hit battleship
+    board.receiveAttack('C', 4);
+
+    expect(board.isBattleshipSunk).toBe(false);
+    expect(board.wasBattleshipHit).toBe(true);
+
+    board.receiveAttack('C', 5);
+    board.receiveAttack('C', 6);
+    board.receiveAttack('C', 7);
+
+    expect(board.isBattleshipSunk).toBe(true);
+    expect(board.wasBattleshipHit).toBe(true);
+
+    expect(board.isCarrierSunk).toBe(false);
+    expect(board.wasCarrierHit).toBe(false);
+
+    // Attack carrier
+    board.receiveAttack('B', 1);
+
+    expect(board.isCarrierSunk).toBe(false);
+    expect(board.wasCarrierHit).toBe(true);
+
+    board.receiveAttack('C', 1);
+    board.receiveAttack('D', 1);
+    board.receiveAttack('E', 1);
+    board.receiveAttack('F', 1);
+
+    expect(board.isCarrierSunk).toBe(true);
+    expect(board.wasCarrierHit).toBe(true);
+  }); */
 });

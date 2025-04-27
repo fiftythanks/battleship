@@ -267,23 +267,23 @@ export default class Gameboard {
     return occupation;
   };
 
-  areAllSunk = () => {
-    if (this.carrier !== null && !this.carrier.isSunk()) return false;
-    if (this.battleship !== null && !this.battleship.isSunk()) return false;
-    if (this.destroyer !== null && !this.destroyer.isSunk()) return false;
-    if (this.submarine !== null && !this.submarine.isSunk()) return false;
-    if (this.patrolBoat !== null && !this.patrolBoat.isSunk()) return false;
+  get areAllSunk() {
+    if (this.carrier !== null && !this.carrier.isSunk) return false;
+    if (this.battleship !== null && !this.battleship.isSunk) return false;
+    if (this.destroyer !== null && !this.destroyer.isSunk) return false;
+    if (this.submarine !== null && !this.submarine.isSunk) return false;
+    if (this.patrolBoat !== null && !this.patrolBoat.isSunk) return false;
     return true;
-  };
+  }
 
-  isFleetFull = () => {
+  get isFleetFull() {
     if (this.carrier === null) return false;
     if (this.battleship === null) return false;
     if (this.destroyer === null) return false;
     if (this.submarine === null) return false;
     if (this.patrolBoat === null) return false;
     return true;
-  };
+  }
 
   wasAttacked = (row, col) => {
     if (
@@ -302,4 +302,8 @@ export default class Gameboard {
     }
     return false;
   };
+
+  /* get isPatrolBoatSunk() {
+    return this.patrolBoat.isSunk;
+  } */
 }

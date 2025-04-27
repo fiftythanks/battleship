@@ -14,7 +14,7 @@ export default class Player {
     this.name = name;
   }
 
-  hasLost = () => this.gameboard.areAllSunk();
+  hasLost = () => this.gameboard.areAllSunk;
 
   placeShip = (coord1, coord2) => this.gameboard.placeShip(coord1, coord2);
 
@@ -22,7 +22,7 @@ export default class Player {
 
   receiveAttack = (row, col) => this.gameboard.receiveAttack(row, col);
 
-  isFleetFull = () => this.gameboard.isFleetFull();
+  isFleetFull = () => this.gameboard.isFleetFull;
 
   wasAttacked = (row, col) => this.gameboard.wasAttacked(row, col);
 }
