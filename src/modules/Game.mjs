@@ -67,4 +67,84 @@ export default class Game {
   P1WasAttacked = (row, col) => this.playerOne.wasAttacked(row, col);
 
   P2WasAttacked = (row, col) => this.playerTwo.wasAttacked(row, col);
+
+  get isP1PatrolBoatSunk() {
+    return this.playerOne.isPatrolBoatSunk;
+  }
+
+  get wasP1PatrolBoatHit() {
+    return this.playerOne.wasPatrolBoatHit;
+  }
+
+  get isP2PatrolBoatSunk() {
+    return this.playerTwo.isPatrolBoatSunk;
+  }
+
+  get wasP2PatrolBoatHit() {
+    return this.playerTwo.wasPatrolBoatHit;
+  }
+
+  get isP1SubmarineSunk() {
+    return this.playerOne.isSubmarineSunk;
+  }
+
+  get wasP1SubmarineHit() {
+    return this.playerOne.wasSubmarineHit;
+  }
+
+  get isP2SubmarineSunk() {
+    return this.playerTwo.isSubmarineSunk;
+  }
+
+  get wasP2SubmarineHit() {
+    return this.playerTwo.wasSubmarineHit;
+  }
+
+  get isP1DestroyerSunk() {
+    return this.playerOne.isDestroyerSunk;
+  }
+
+  get wasP1DestroyerHit() {
+    return this.playerOne.wasDestroyerHit;
+  }
+
+  get isP2DestroyerSunk() {
+    return this.playerTwo.isDestroyerSunk;
+  }
+
+  get wasP2DestroyerHit() {
+    return this.playerTwo.wasDestroyerHit;
+  }
+
+  get isP1BattleshipSunk() {
+    return this.playerOne.isBattleshipSunk;
+  }
+
+  get wasP1BattleshipHit() {
+    return this.playerOne.wasBattleshipHit;
+  }
+
+  get isP2BattleshipSunk() {
+    return this.playerTwo.isBattleshipSunk;
+  }
+
+  get wasP2BattleshipHit() {
+    return this.playerTwo.wasBattleshipHit;
+  }
+
+  get isP1CarrierSunk() {
+    return this.playerOne.isCarrierSunk;
+  }
+
+  get wasP1CarrierHit() {
+    return this.playerOne.wasCarrierHit;
+  }
+
+  get isP2CarrierSunk() {
+    return this.playerTwo.isCarrierSunk;
+  }
+
+  get wasP2CarrierHit() {
+    return this.playerTwo.wasCarrierHit;
+  }
 }

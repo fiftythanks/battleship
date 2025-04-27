@@ -29,4 +29,44 @@ export default class Player {
   }
 
   wasAttacked = (row, col) => this.gameboard.wasAttacked(row, col);
+
+  get isPatrolBoatSunk() {
+    return this.gameboard.isPatrolBoatSunk;
+  }
+
+  get wasPatrolBoatHit() {
+    return this.gameboard.wasPatrolBoatHit;
+  }
+
+  get isSubmarineSunk() {
+    return this.gameboard.isSubmarineSunk;
+  }
+
+  get wasSubmarineHit() {
+    return this.gameboard.wasSubmarineHit;
+  }
+
+  get isDestroyerSunk() {
+    return this.gameboard.isDestroyerSunk;
+  }
+
+  get wasDestroyerHit() {
+    return this.gameboard.wasDestroyerHit;
+  }
+
+  get isBattleshipSunk() {
+    return this.gameboard.isBattleshipSunk;
+  }
+
+  get wasBattleshipHit() {
+    return this.gameboard.wasBattleshipHit;
+  }
+
+  get isCarrierSunk() {
+    return this.gameboard.isCarrierSunk;
+  }
+
+  get wasCarrierHit() {
+    return this.gameboard.wasCarrierHit;
+  }
 }

@@ -57,4 +57,85 @@ describe('Player class', () => {
 
     expect(player.isFleetFull).toBe(true);
   });
+
+  it('can tell if a ship wasHit or isSunk', () => {
+    const player = new Player();
+
+    player.placeShip(['B', 1], ['F', 1]);
+    player.placeShip(['C', 4], ['C', 7]);
+    player.placeShip(['E', 3], ['E', 5]);
+    player.placeShip(['G', 6], ['H', 6]);
+    player.placeShip(['J', 4]);
+
+    expect(player.isPatrolBoatSunk).toBe(false);
+    expect(player.wasPatrolBoatHit).toBe(false);
+
+    // Hit patrol boat
+    player.receiveAttack('J', 4);
+
+    expect(player.wasPatrolBoatHit).toBe(true);
+    expect(player.isPatrolBoatSunk).toBe(true);
+
+    expect(player.isSubmarineSunk).toBe(false);
+    expect(player.wasSubmarineHit).toBe(false);
+
+    // Hit submarine
+    player.receiveAttack('G', 6);
+
+    expect(player.isSubmarineSunk).toBe(false);
+    expect(player.wasSubmarineHit).toBe(true);
+
+    player.receiveAttack('H', 6);
+
+    expect(player.isSubmarineSunk).toBe(true);
+    expect(player.wasSubmarineHit).toBe(true);
+
+    expect(player.isDestroyerSunk).toBe(false);
+    expect(player.wasDestroyerHit).toBe(false);
+
+    // Hit destroyer
+    player.receiveAttack('E', 3);
+
+    expect(player.isDestroyerSunk).toBe(false);
+    expect(player.wasDestroyerHit).toBe(true);
+
+    player.receiveAttack('E', 4);
+    player.receiveAttack('E', 5);
+
+    expect(player.isDestroyerSunk).toBe(true);
+    expect(player.wasDestroyerHit).toBe(true);
+
+    expect(player.isBattleshipSunk).toBe(false);
+    expect(player.wasBattleshipHit).toBe(false);
+
+    // Hit battleship
+    player.receiveAttack('C', 4);
+
+    expect(player.isBattleshipSunk).toBe(false);
+    expect(player.wasBattleshipHit).toBe(true);
+
+    player.receiveAttack('C', 5);
+    player.receiveAttack('C', 6);
+    player.receiveAttack('C', 7);
+
+    expect(player.isBattleshipSunk).toBe(true);
+    expect(player.wasBattleshipHit).toBe(true);
+
+    expect(player.isCarrierSunk).toBe(false);
+    expect(player.wasCarrierHit).toBe(false);
+
+    // Attack carrier
+    player.receiveAttack('B', 1);
+
+    expect(player.isCarrierSunk).toBe(false);
+    expect(player.wasCarrierHit).toBe(true);
+
+    player.receiveAttack('C', 1);
+    player.receiveAttack('D', 1);
+    player.receiveAttack('E', 1);
+    player.receiveAttack('F', 1);
+
+    expect(player.isCarrierSunk).toBe(true);
+    expect(player.wasCarrierHit).toBe(true);
+  });
 });
