@@ -24,7 +24,7 @@ export default class Game {
       if (this.whoseTurn === this.playerOne) {
         hitResult = this.#attackPlayerTwo(row, col);
 
-        if (this.playerTwo.hasLost()) {
+        if (this.playerTwo.hasLost) {
           this.winner = this.playerOne;
         } else {
           this.whoseTurn = this.playerTwo;
@@ -32,12 +32,13 @@ export default class Game {
       } else if (this.whoseTurn === this.playerTwo) {
         hitResult = this.#attackPlayerOne(row, col);
 
-        if (this.playerOne.hasLost()) {
+        if (this.playerOne.hasLost) {
           this.winner = this.playerTwo;
         } else {
           this.whoseTurn = this.playerOne;
         }
       }
+
       return hitResult;
     }
     return this.winner !== null;
@@ -56,11 +57,11 @@ export default class Game {
   }
 
   get isP1FleetFull() {
-    return this.playerOne.isFleetFull();
+    return this.playerOne.isFleetFull;
   }
 
   get isP2FleetFull() {
-    return this.playerTwo.isFleetFull();
+    return this.playerTwo.isFleetFull;
   }
 
   P1WasAttacked = (row, col) => this.playerOne.wasAttacked(row, col);

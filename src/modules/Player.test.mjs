@@ -37,17 +37,17 @@ describe('Player class', () => {
     player.placeShip(['B', 4]);
 
     expect(player.hasLost).toBeDefined();
-    expect(player.hasLost()).toBe(false);
+    expect(player.hasLost).toBe(false);
 
     player.receiveAttack('B', 4);
-    expect(player.hasLost()).toBe(true);
+    expect(player.hasLost).toBe(true);
   });
 
   it('can tell if the fleet on the board has all five types of ships', () => {
     const player = new Player();
 
     expect(player.isFleetFull).toBeDefined();
-    expect(player.isFleetFull()).toBe(false);
+    expect(player.isFleetFull).toBe(false);
 
     player.placeShip(['B', 1], ['F', 1]);
     player.placeShip(['C', 4], ['C', 7]);
@@ -55,6 +55,6 @@ describe('Player class', () => {
     player.placeShip(['G', 6], ['H', 6]);
     player.placeShip(['J', 4]);
 
-    expect(player.isFleetFull()).toBe(true);
+    expect(player.isFleetFull).toBe(true);
   });
 });
