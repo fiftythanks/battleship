@@ -29,7 +29,7 @@ export default class Battleship {
     this.hits += 1;
   }
 
-  isSunk() {
+  get isSunk() {
     return this.hits >= this.length;
   }
 }

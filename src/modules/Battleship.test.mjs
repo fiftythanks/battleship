@@ -36,16 +36,16 @@ describe('Battleship class', () => {
   it('can be sunk', () => {
     const carrier = new Battleship(5);
 
-    expect(carrier.isSunk()).toBe(false);
+    expect(carrier.isSunk).toBe(false);
 
     carrier.hit();
     carrier.hit();
     expect(carrier.hits).toBe(2);
-    expect(carrier.isSunk()).toBe(false);
+    expect(carrier.isSunk).toBe(false);
 
     carrier.hit();
     carrier.hit();
     carrier.hit();
-    expect(carrier.isSunk()).toBe(true);
+    expect(carrier.isSunk).toBe(true);
   });
 });
