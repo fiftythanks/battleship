@@ -197,4 +197,38 @@ describe('Gameboard class', () => {
     expect(board.isCarrierSunk).toBe(true);
     expect(board.wasCarrierHit).toBe(true);
   });
+
+  it('can give ship coordinates', () => {
+    const board = new Gameboard();
+
+    board.placeShip(['B', 1], ['F', 1]);
+    board.placeShip(['C', 4], ['C', 7]);
+    board.placeShip(['E', 3], ['E', 5]);
+    board.placeShip(['G', 6], ['H', 6]);
+    board.placeShip(['J', 4]);
+
+    expect(board.patrolBoatCoords).toMatchObject([['J', 4]]);
+    expect(board.submarineCoords).toMatchObject([
+      ['G', 6],
+      ['H', 6],
+    ]);
+    expect(board.destroyerCoords).toMatchObject([
+      ['E', 3],
+      ['E', 4],
+      ['E', 5],
+    ]);
+    expect(board.battleshipCoords).toMatchObject([
+      ['C', 4],
+      ['C', 5],
+      ['C', 6],
+      ['C', 7],
+    ]);
+    expect(board.carrierCoords).toMatchObject([
+      ['B', 1],
+      ['C', 1],
+      ['D', 1],
+      ['E', 1],
+      ['F', 1],
+    ]);
+  });
 });

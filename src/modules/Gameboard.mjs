@@ -46,15 +46,48 @@ export default class Gameboard {
     this.hits = [];
 
     // 5 squares
-    this.carrier = null;
+    this.carrier = {
+      instance: null,
+      coords: [
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+      ],
+    };
     // 4 squares
-    this.battleship = null;
+    this.battleship = {
+      instance: null,
+      coords: [
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+      ],
+    };
     // 3 squares
-    this.destroyer = null;
+    this.destroyer = {
+      instance: null,
+      coords: [
+        [null, null],
+        [null, null],
+        [null, null],
+      ],
+    };
     // 2 squares
-    this.submarine = null;
+    this.submarine = {
+      instance: null,
+      coords: [
+        [null, null],
+        [null, null],
+      ],
+    };
     // 1 square
-    this.patrolBoat = null;
+    this.patrolBoat = {
+      instance: null,
+      coords: [[null, null]],
+    };
   }
 
   // coord = [row, col]; col parameters are not indices of elements in rows, they are column indices on the board as pictured above; row parameters are letters from A to J.
@@ -107,7 +140,7 @@ export default class Gameboard {
       if (row[col - 1].occupiedBy !== null) return null;
 
       const type = 'patrolBoat';
-      if (this[`${type}`] !== null) {
+      if (this[`${type}`].instance !== null) {
         throw new Error(
           `A ship of type ${type} is already present on the board.`,
         );
@@ -115,8 +148,10 @@ export default class Gameboard {
 
       const length = 1;
       ship = new Battleship(length);
-      this[`${type}`] = ship;
       row[col - 1].occupiedBy = ship;
+      this[`${type}`].instance = ship;
+      this[`${type}`].coords[0][0] = row1;
+      this[`${type}`].coords[0][1] = col;
     } else if (row1 === row2) {
       const row = this.rows[`${row1}`];
 
@@ -148,17 +183,20 @@ export default class Gameboard {
         // do nothing
       }
 
-      if (this[`${type}`] !== null) {
+      if (this[`${type}`].instance !== null) {
         throw new Error(
           `A ship of type ${type} is already present on the board.`,
         );
       }
 
       ship = new Battleship(length);
-      this[`${type}`] = ship;
+      this[`${type}`].instance = ship;
 
-      for (let col = col1; col <= col2; col += 1) {
+      for (let col = col1, i = 0; col <= col2; col += 1) {
         row[col - 1].occupiedBy = ship;
+        this[`${type}`].coords[i][0] = row1;
+        this[`${type}`].coords[i][1] = col;
+        i += 1;
       }
     } else {
       const col = col1;
@@ -196,21 +234,24 @@ export default class Gameboard {
         // do nothing
       }
 
-      if (this[`${type}`] !== null) {
+      if (this[`${type}`].instance !== null) {
         throw new Error(
           `A ship of type ${type} is already present on the board.`,
         );
       }
 
       ship = new Battleship(length);
-      this[`${type}`] = ship;
+      this[`${type}`].instance = ship;
 
       for (
-        let row = letters.indexOf(row1);
+        let row = letters.indexOf(row1), i = 0;
         row <= letters.indexOf(row2);
         row += 1
       ) {
         this.rows[`${letters[row]}`][col - 1].occupiedBy = ship;
+        this[`${type}`].coords[i][0] = letters[row];
+        this[`${type}`].coords[i][1] = col;
+        i += 1;
       }
     }
 
@@ -268,20 +309,25 @@ export default class Gameboard {
   };
 
   get areAllSunk() {
-    if (this.carrier !== null && !this.carrier.isSunk) return false;
-    if (this.battleship !== null && !this.battleship.isSunk) return false;
-    if (this.destroyer !== null && !this.destroyer.isSunk) return false;
-    if (this.submarine !== null && !this.submarine.isSunk) return false;
-    if (this.patrolBoat !== null && !this.patrolBoat.isSunk) return false;
+    if (this.carrier.instance !== null && !this.carrier.instance.isSunk)
+      return false;
+    if (this.battleship.instance !== null && !this.battleship.instance.isSunk)
+      return false;
+    if (this.destroyer.instance !== null && !this.destroyer.instance.isSunk)
+      return false;
+    if (this.submarine.instance !== null && !this.submarine.instance.isSunk)
+      return false;
+    if (this.patrolBoat.instance !== null && !this.patrolBoat.instance.isSunk)
+      return false;
     return true;
   }
 
   get isFleetFull() {
-    if (this.carrier === null) return false;
-    if (this.battleship === null) return false;
-    if (this.destroyer === null) return false;
-    if (this.submarine === null) return false;
-    if (this.patrolBoat === null) return false;
+    if (this.carrier.instance === null) return false;
+    if (this.battleship.instance === null) return false;
+    if (this.destroyer.instance === null) return false;
+    if (this.submarine.instance === null) return false;
+    if (this.patrolBoat.instance === null) return false;
     return true;
   }
 
@@ -304,42 +350,62 @@ export default class Gameboard {
   };
 
   get isPatrolBoatSunk() {
-    return this.patrolBoat.isSunk;
+    return this.patrolBoat.instance.isSunk;
   }
 
   get wasPatrolBoatHit() {
-    return this.patrolBoat.wasHit;
+    return this.patrolBoat.instance.wasHit;
   }
 
   get isSubmarineSunk() {
-    return this.submarine.isSunk;
+    return this.submarine.instance.isSunk;
   }
 
   get wasSubmarineHit() {
-    return this.submarine.wasHit;
+    return this.submarine.instance.wasHit;
   }
 
   get isDestroyerSunk() {
-    return this.destroyer.isSunk;
+    return this.destroyer.instance.isSunk;
   }
 
   get wasDestroyerHit() {
-    return this.destroyer.wasHit;
+    return this.destroyer.instance.wasHit;
   }
 
   get isBattleshipSunk() {
-    return this.battleship.isSunk;
+    return this.battleship.instance.isSunk;
   }
 
   get wasBattleshipHit() {
-    return this.battleship.wasHit;
+    return this.battleship.instance.wasHit;
   }
 
   get isCarrierSunk() {
-    return this.carrier.isSunk;
+    return this.carrier.instance.isSunk;
   }
 
   get wasCarrierHit() {
-    return this.carrier.wasHit;
+    return this.carrier.instance.wasHit;
+  }
+
+  get patrolBoatCoords() {
+    return this.patrolBoat.coords;
+  }
+
+  get submarineCoords() {
+    return this.submarine.coords;
+  }
+
+  get destroyerCoords() {
+    return this.destroyer.coords;
+  }
+
+  get battleshipCoords() {
+    return this.battleship.coords;
+  }
+
+  get carrierCoords() {
+    return this.carrier.coords;
   }
 }
