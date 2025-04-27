@@ -36,4 +36,28 @@ export default class Battleship {
   get wasHit() {
     return this.hits > 0;
   }
+
+  get type() {
+    let type;
+    switch (this.length) {
+      case 1:
+        type = 'patrolBoat';
+        break;
+      case 2:
+        type = 'submarine';
+        break;
+      case 3:
+        type = 'destroyer';
+        break;
+      case 4:
+        type = 'battleship';
+        break;
+      case 5:
+        type = 'carrier';
+        break;
+      default:
+      // do nothing
+    }
+    return type;
+  }
 }

@@ -58,4 +58,9 @@ describe('Battleship class', () => {
 
     expect(submarine.wasHit).toBe(true);
   });
+
+  it('can tell which type of ship it is', () => {
+    const destroyer = new Battleship(3);
+    expect(destroyer.type).toBe('destroyer');
+  });
 });
