@@ -76,12 +76,20 @@ export default class Game {
     return this.playerOne.wasPatrolBoatHit;
   }
 
+  get P1PatrolBoatCoords() {
+    return this.playerOne.patrolBoatCoords;
+  }
+
   get isP2PatrolBoatSunk() {
     return this.playerTwo.isPatrolBoatSunk;
   }
 
   get wasP2PatrolBoatHit() {
     return this.playerTwo.wasPatrolBoatHit;
+  }
+
+  get P2PatrolBoatCoords() {
+    return this.playerTwo.patrolBoatCoords;
   }
 
   get isP1SubmarineSunk() {
@@ -92,12 +100,20 @@ export default class Game {
     return this.playerOne.wasSubmarineHit;
   }
 
+  get P1SubmarineCoords() {
+    return this.playerOne.submarineCoords;
+  }
+
   get isP2SubmarineSunk() {
     return this.playerTwo.isSubmarineSunk;
   }
 
   get wasP2SubmarineHit() {
     return this.playerTwo.wasSubmarineHit;
+  }
+
+  get P2SubmarineCoords() {
+    return this.playerTwo.submarineCoords;
   }
 
   get isP1DestroyerSunk() {
@@ -108,12 +124,20 @@ export default class Game {
     return this.playerOne.wasDestroyerHit;
   }
 
+  get P1DestroyerCoords() {
+    return this.playerOne.destroyerCoords;
+  }
+
   get isP2DestroyerSunk() {
     return this.playerTwo.isDestroyerSunk;
   }
 
   get wasP2DestroyerHit() {
     return this.playerTwo.wasDestroyerHit;
+  }
+
+  get P2DestroyerCoords() {
+    return this.playerTwo.destroyerCoords;
   }
 
   get isP1BattleshipSunk() {
@@ -124,12 +148,20 @@ export default class Game {
     return this.playerOne.wasBattleshipHit;
   }
 
+  get P1BattleshipCoords() {
+    return this.playerOne.battleshipCoords;
+  }
+
   get isP2BattleshipSunk() {
     return this.playerTwo.isBattleshipSunk;
   }
 
   get wasP2BattleshipHit() {
     return this.playerTwo.wasBattleshipHit;
+  }
+
+  get P2BattleshipCoords() {
+    return this.playerTwo.battleshipCoords;
   }
 
   get isP1CarrierSunk() {
@@ -140,11 +172,19 @@ export default class Game {
     return this.playerOne.wasCarrierHit;
   }
 
+  get P1CarrierCoords() {
+    return this.playerOne.carrierCoords;
+  }
+
   get isP2CarrierSunk() {
     return this.playerTwo.isCarrierSunk;
   }
 
   get wasP2CarrierHit() {
     return this.playerTwo.wasCarrierHit;
+  }
+
+  get P2CarrierCoords() {
+    return this.playerTwo.carrierCoords;
   }
 }

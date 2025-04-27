@@ -226,4 +226,71 @@ describe('Game class', () => {
     expect(gameOne.isP1CarrierSunk).toBe(true);
     expect(gameOne.wasP1CarrierHit).toBe(true);
   });
+
+  it('can give ship coordinates', () => {
+    const game = new Game();
+
+    game.P1PlaceShip(['B', 1], ['F', 1]);
+    game.P1PlaceShip(['C', 4], ['C', 7]);
+    game.P1PlaceShip(['E', 3], ['E', 5]);
+    game.P1PlaceShip(['G', 6], ['H', 6]);
+    game.P1PlaceShip(['J', 4]);
+
+    game.P2PlaceShip(['B', 1], ['F', 1]);
+    game.P2PlaceShip(['C', 4], ['C', 7]);
+    game.P2PlaceShip(['E', 3], ['E', 5]);
+    game.P2PlaceShip(['G', 6], ['H', 6]);
+    game.P2PlaceShip(['J', 4]);
+
+    expect(game.P1PatrolBoatCoords).toMatchObject([['J', 4]]);
+    expect(game.P2PatrolBoatCoords).toMatchObject([['J', 4]]);
+
+    expect(game.P1SubmarineCoords).toMatchObject([
+      ['G', 6],
+      ['H', 6],
+    ]);
+    expect(game.P2SubmarineCoords).toMatchObject([
+      ['G', 6],
+      ['H', 6],
+    ]);
+
+    expect(game.P1DestroyerCoords).toMatchObject([
+      ['E', 3],
+      ['E', 4],
+      ['E', 5],
+    ]);
+    expect(game.P2DestroyerCoords).toMatchObject([
+      ['E', 3],
+      ['E', 4],
+      ['E', 5],
+    ]);
+
+    expect(game.P1BattleshipCoords).toMatchObject([
+      ['C', 4],
+      ['C', 5],
+      ['C', 6],
+      ['C', 7],
+    ]);
+    expect(game.P2BattleshipCoords).toMatchObject([
+      ['C', 4],
+      ['C', 5],
+      ['C', 6],
+      ['C', 7],
+    ]);
+
+    expect(game.P1CarrierCoords).toMatchObject([
+      ['B', 1],
+      ['C', 1],
+      ['D', 1],
+      ['E', 1],
+      ['F', 1],
+    ]);
+    expect(game.P2CarrierCoords).toMatchObject([
+      ['B', 1],
+      ['C', 1],
+      ['D', 1],
+      ['E', 1],
+      ['F', 1],
+    ]);
+  });
 });

@@ -38,12 +38,20 @@ export default class Player {
     return this.gameboard.wasPatrolBoatHit;
   }
 
+  get patrolBoatCoords() {
+    return this.gameboard.patrolBoatCoords;
+  }
+
   get isSubmarineSunk() {
     return this.gameboard.isSubmarineSunk;
   }
 
   get wasSubmarineHit() {
     return this.gameboard.wasSubmarineHit;
+  }
+
+  get submarineCoords() {
+    return this.gameboard.submarineCoords;
   }
 
   get isDestroyerSunk() {
@@ -54,6 +62,10 @@ export default class Player {
     return this.gameboard.wasDestroyerHit;
   }
 
+  get destroyerCoords() {
+    return this.gameboard.destroyerCoords;
+  }
+
   get isBattleshipSunk() {
     return this.gameboard.isBattleshipSunk;
   }
@@ -62,11 +74,19 @@ export default class Player {
     return this.gameboard.wasBattleshipHit;
   }
 
+  get battleshipCoords() {
+    return this.gameboard.battleshipCoords;
+  }
+
   get isCarrierSunk() {
     return this.gameboard.isCarrierSunk;
   }
 
   get wasCarrierHit() {
     return this.gameboard.wasCarrierHit;
+  }
+
+  get carrierCoords() {
+    return this.gameboard.carrierCoords;
   }
 }

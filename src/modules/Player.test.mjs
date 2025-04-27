@@ -138,4 +138,38 @@ describe('Player class', () => {
     expect(player.isCarrierSunk).toBe(true);
     expect(player.wasCarrierHit).toBe(true);
   });
+
+  it('can give ship coordinates', () => {
+    const player = new Player();
+
+    player.placeShip(['B', 1], ['F', 1]);
+    player.placeShip(['C', 4], ['C', 7]);
+    player.placeShip(['E', 3], ['E', 5]);
+    player.placeShip(['G', 6], ['H', 6]);
+    player.placeShip(['J', 4]);
+
+    expect(player.patrolBoatCoords).toMatchObject([['J', 4]]);
+    expect(player.submarineCoords).toMatchObject([
+      ['G', 6],
+      ['H', 6],
+    ]);
+    expect(player.destroyerCoords).toMatchObject([
+      ['E', 3],
+      ['E', 4],
+      ['E', 5],
+    ]);
+    expect(player.battleshipCoords).toMatchObject([
+      ['C', 4],
+      ['C', 5],
+      ['C', 6],
+      ['C', 7],
+    ]);
+    expect(player.carrierCoords).toMatchObject([
+      ['B', 1],
+      ['C', 1],
+      ['D', 1],
+      ['E', 1],
+      ['F', 1],
+    ]);
+  });
 });
