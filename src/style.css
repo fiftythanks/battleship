@@ -158,3 +158,6 @@ form {
 .square.missed {
   background-color: blue;
 }
+.square.sunk {
+  background: grey;
+}

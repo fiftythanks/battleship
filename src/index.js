@@ -65,6 +65,22 @@ function initialize(playerOneName, playerTwoName) {
             } else if (typeof output === 'object') {
               playerOneRow[j].classList.add('hit');
               playerOneRowEnemy[j].classList.add('hit');
+              // If a ship was hit, the output of makeTurn is the ship that was hit
+              if (output.isSunk) {
+                // submarine => P2SubmarineCoords
+                const coords =
+                  game[
+                    `P1${output.type.replace(/^./, output.type.at(0).toUpperCase())}Coords`
+                  ];
+                coords.forEach((coord) => {
+                  playerOneRows[letters.indexOf(coord[0])].children[
+                    coord[1]
+                  ].classList.add('sunk');
+                  playerOneRowsEnemy[letters.indexOf(coord[0])].children[
+                    coord[1]
+                  ].classList.add('sunk');
+                });
+              }
             }
 
             playerOneBoardEnemy.style.display = 'none';
@@ -98,6 +114,22 @@ function initialize(playerOneName, playerTwoName) {
             } else if (typeof output === 'object') {
               playerTwoRow[j].classList.add('hit');
               playerTwoRowEnemy[j].classList.add('hit');
+              // If a ship was hit, the output of makeTurn is the ship that was hit
+              if (output.isSunk) {
+                // submarine => P2SubmarineCoords
+                const coords =
+                  game[
+                    `P2${output.type.replace(/^./, output.type.at(0).toUpperCase())}Coords`
+                  ];
+                coords.forEach((coord) => {
+                  playerTwoRows[letters.indexOf(coord[0])].children[
+                    coord[1]
+                  ].classList.add('sunk');
+                  playerTwoRowsEnemy[letters.indexOf(coord[0])].children[
+                    coord[1]
+                  ].classList.add('sunk');
+                });
+              }
             }
 
             playerTwoBoardEnemy.style.display = 'none';
