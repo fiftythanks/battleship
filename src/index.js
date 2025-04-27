@@ -83,17 +83,19 @@ function initialize(playerOneName, playerTwoName) {
               }
             }
 
-            playerOneBoardEnemy.style.display = 'none';
+            if (game.whoseTurn !== game.playerTwo) {
+              playerOneBoardEnemy.style.display = 'none';
 
-            if (game.winner === null) {
-              whoseTurnDOM.textContent = playerOneName;
-              playerTwoBoard.style.display = 'none';
-              playerTwoBoardEnemy.style.display = 'flex';
-            } else {
-              whoseTurnWrapper.textContent = `${playerTwoName} wins!`;
+              if (game.winner === null) {
+                whoseTurnDOM.textContent = playerOneName;
+                playerTwoBoard.style.display = 'none';
+                playerTwoBoardEnemy.style.display = 'flex';
+              } else {
+                whoseTurnWrapper.textContent = `${playerTwoName} wins!`;
+              }
+
+              playerOneBoard.style.display = 'flex';
             }
-
-            playerOneBoard.style.display = 'flex';
           } catch (error) {
             // Implement some kind of logic to explain to the user that you can't hit twice the same square, if he/she tries to click more than one time, like 5 times or more.
           }
@@ -132,17 +134,19 @@ function initialize(playerOneName, playerTwoName) {
               }
             }
 
-            playerTwoBoardEnemy.style.display = 'none';
+            if (game.whoseTurn !== game.playerOne) {
+              playerTwoBoardEnemy.style.display = 'none';
 
-            if (game.winner === null) {
-              whoseTurnDOM.textContent = playerTwoName;
-              playerOneBoard.style.display = 'none';
-              playerOneBoardEnemy.style.display = 'flex';
-            } else {
-              whoseTurnWrapper.textContent = `${playerOneName} wins!`;
+              if (game.winner === null) {
+                whoseTurnDOM.textContent = playerTwoName;
+                playerOneBoard.style.display = 'none';
+                playerOneBoardEnemy.style.display = 'flex';
+              } else {
+                whoseTurnWrapper.textContent = `${playerOneName} wins!`;
+              }
+
+              playerTwoBoard.style.display = 'flex';
             }
-
-            playerTwoBoard.style.display = 'flex';
           } catch (error) {
             // Implement some kind of logic to explain to the user that you can't hit twice the same square, if he/she tries to click more than one time, like 5 times or more.
           }

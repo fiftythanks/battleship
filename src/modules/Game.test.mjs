@@ -26,6 +26,25 @@ describe('Game class', () => {
     expect(game.makeTurn('B', 1)).toBeInstanceOf(Battleship);
   });
 
+  it('should give players one more turn if they hit an enemy ship', () => {
+    const game = new Game();
+
+    game.P1PlaceShip(['B', 1], ['F', 1]);
+    game.P1PlaceShip(['C', 4], ['C', 7]);
+    game.P1PlaceShip(['E', 3], ['E', 5]);
+    game.P1PlaceShip(['G', 6], ['H', 6]);
+    game.P1PlaceShip(['J', 4]);
+
+    game.P2PlaceShip(['B', 1], ['F', 1]);
+    game.P2PlaceShip(['C', 4], ['C', 7]);
+    game.P2PlaceShip(['E', 3], ['E', 5]);
+    game.P2PlaceShip(['G', 6], ['H', 6]);
+    game.P2PlaceShip(['J', 4]);
+
+    game.makeTurn('B', 1);
+    expect(game.whoseTurn).toBe(game.playerOne);
+  });
+
   it('can check if a square has been attacked already', () => {
     expect(game.P1WasAttacked('C', 4)).toBe(true);
     expect(game.P1WasAttacked('F', 5)).toBe(false);
@@ -90,9 +109,14 @@ describe('Game class', () => {
     expect(game.isP2PatrolBoatSunk).toBe(false);
     expect(game.wasP2PatrolBoatHit).toBe(false);
 
-    // Hit patrol boat
+    // P1:Hit patrol boat
     game.makeTurn('J', 4);
+    // P1: Miss
+    game.makeTurn('J', 5);
+    // P2: Hit patrol boat
     game.makeTurn('J', 4);
+    // P2: Miss
+    game.makeTurn('J', 5);
 
     expect(game.isP1PatrolBoatSunk).toBe(true);
     expect(game.wasP1PatrolBoatHit).toBe(true);
@@ -104,17 +128,28 @@ describe('Game class', () => {
     expect(game.isP2SubmarineSunk).toBe(false);
     expect(game.wasP2SubmarineHit).toBe(false);
 
-    // Hit submarine
+    // P1: Hit submarine
     game.makeTurn('G', 6);
+    // P1: Miss
+    game.makeTurn('J', 6);
+    // P2: Hit submarine
     game.makeTurn('G', 6);
+    // P2: Miss
+    game.makeTurn('J', 6);
 
     expect(game.isP1SubmarineSunk).toBe(false);
     expect(game.wasP1SubmarineHit).toBe(true);
     expect(game.isP2SubmarineSunk).toBe(false);
     expect(game.wasP2SubmarineHit).toBe(true);
 
+    // P1: Hit submarine
     game.makeTurn('H', 6);
+    // P1: Miss
+    game.makeTurn('H', 7);
+    // P2: Hit submarine
     game.makeTurn('H', 6);
+    // P2: Miss
+    game.makeTurn('H', 7);
 
     expect(game.isP1SubmarineSunk).toBe(true);
     expect(game.wasP1SubmarineHit).toBe(true);
@@ -126,19 +161,31 @@ describe('Game class', () => {
     expect(game.isP2DestroyerSunk).toBe(false);
     expect(game.wasP2DestroyerHit).toBe(false);
 
-    // Hit destroyer
+    // P1: Hit destroyer
     game.makeTurn('E', 3);
+    // P1: Miss
+    game.makeTurn('J', 7);
+    // P2: Hit destroyer
     game.makeTurn('E', 3);
+    // P2: Miss
+    game.makeTurn('J', 7);
 
     expect(game.isP1DestroyerSunk).toBe(false);
     expect(game.wasP1DestroyerHit).toBe(true);
     expect(game.isP2DestroyerSunk).toBe(false);
     expect(game.wasP2DestroyerHit).toBe(true);
 
-    game.makeTurn('E', 4);
+    // P1: Hit destroyer
     game.makeTurn('E', 4);
     game.makeTurn('E', 5);
+    // P1: Miss
+    game.makeTurn('J', 8);
+
+    // P2: Hit destroyer
+    game.makeTurn('E', 4);
     game.makeTurn('E', 5);
+    // P2: Miss
+    game.makeTurn('J', 8);
 
     expect(game.isP1DestroyerSunk).toBe(true);
     expect(game.wasP1DestroyerHit).toBe(true);
@@ -150,21 +197,34 @@ describe('Game class', () => {
     expect(game.isP2BattleshipSunk).toBe(false);
     expect(game.wasP2BattleshipHit).toBe(false);
 
-    // Hit battleship
+    // P1: Hit battleship
     game.makeTurn('C', 4);
+    // P1: Miss
+    game.makeTurn('J', 9);
+
+    // P2: Hit battleship
     game.makeTurn('C', 4);
+    // P2: Miss
+    game.makeTurn('J', 9);
 
     expect(game.isP1BattleshipSunk).toBe(false);
     expect(game.wasP1BattleshipHit).toBe(true);
     expect(game.isP2BattleshipSunk).toBe(false);
     expect(game.wasP2BattleshipHit).toBe(true);
 
-    game.makeTurn('C', 5);
+    // P1: Hit battleship
     game.makeTurn('C', 5);
     game.makeTurn('C', 6);
+    game.makeTurn('C', 7);
+    // P1: Miss
+    game.makeTurn('J', 10);
+
+    // P2: Hit battleship
+    game.makeTurn('C', 5);
     game.makeTurn('C', 6);
     game.makeTurn('C', 7);
-    game.makeTurn('C', 7);
+    // P2: Miss
+    game.makeTurn('J', 10);
 
     expect(game.isP1BattleshipSunk).toBe(true);
     expect(game.wasP1BattleshipHit).toBe(true);
@@ -176,23 +236,36 @@ describe('Game class', () => {
     expect(game.isP2CarrierSunk).toBe(false);
     expect(game.wasP2CarrierHit).toBe(false);
 
-    // Attack carrier
+    // P1: Hit carrier
     game.makeTurn('B', 1);
+    // P1: Miss
+    game.makeTurn('A', 10);
+
+    // P2: Hit carrier
     game.makeTurn('B', 1);
+    // P2: Miss
+    game.makeTurn('A', 10);
 
     expect(game.isP1CarrierSunk).toBe(false);
     expect(game.wasP1CarrierHit).toBe(true);
     expect(game.isP2CarrierSunk).toBe(false);
     expect(game.wasP2CarrierHit).toBe(true);
 
-    game.makeTurn('C', 1);
+    // P1: Hit carrier
     game.makeTurn('C', 1);
     game.makeTurn('D', 1);
+    game.makeTurn('E', 1);
+    game.makeTurn('F', 1);
+    // P1: Miss
+    game.makeTurn('A', 9);
+
+    // P2: Hit carrier
+    game.makeTurn('C', 1);
     game.makeTurn('D', 1);
     game.makeTurn('E', 1);
-    game.makeTurn('E', 1);
     game.makeTurn('F', 1);
-    game.makeTurn('F', 1);
+    // P2: Miss
+    game.makeTurn('A', 9);
 
     expect(game.isP2CarrierSunk).toBe(true);
     expect(game.wasP2CarrierHit).toBe(true);
@@ -212,15 +285,20 @@ describe('Game class', () => {
     gameOne.P2PlaceShip(['G', 6], ['H', 6]);
     gameOne.P2PlaceShip(['J', 4]);
 
-    gameOne.makeTurn('B', 1);
+    // P1 hits
     gameOne.makeTurn('B', 1);
     gameOne.makeTurn('C', 1);
-    gameOne.makeTurn('C', 1);
     gameOne.makeTurn('D', 1);
-    gameOne.makeTurn('D', 1);
-    gameOne.makeTurn('E', 1);
     gameOne.makeTurn('E', 1);
     gameOne.makeTurn('F', 1);
+    // P1 misses
+    gameOne.makeTurn('J', 10);
+
+    // P2
+    gameOne.makeTurn('B', 1);
+    gameOne.makeTurn('C', 1);
+    gameOne.makeTurn('D', 1);
+    gameOne.makeTurn('E', 1);
     gameOne.makeTurn('F', 1);
 
     expect(gameOne.isP1CarrierSunk).toBe(true);

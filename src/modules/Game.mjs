@@ -26,7 +26,7 @@ export default class Game {
 
         if (this.playerTwo.hasLost) {
           this.winner = this.playerOne;
-        } else {
+        } else if (hitResult === null) {
           this.whoseTurn = this.playerTwo;
         }
       } else if (this.whoseTurn === this.playerTwo) {
@@ -34,7 +34,7 @@ export default class Game {
 
         if (this.playerOne.hasLost) {
           this.winner = this.playerTwo;
-        } else {
+        } else if (hitResult === null) {
           this.whoseTurn = this.playerOne;
         }
       }
