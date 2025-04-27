@@ -117,7 +117,7 @@ describe('Gameboard class', () => {
     expect(board.isFleetFull).toBe(true);
   });
 
-  /* it('can tell if a ship was hit or if a ship was sunk', () => {
+  it('can tell if a ship was hit or if a ship was sunk', () => {
     const board = new Gameboard();
 
     board.placeShip(['B', 1], ['F', 1]);
@@ -196,5 +196,5 @@ describe('Gameboard class', () => {
 
     expect(board.isCarrierSunk).toBe(true);
     expect(board.wasCarrierHit).toBe(true);
-  }); */
+  });
 });

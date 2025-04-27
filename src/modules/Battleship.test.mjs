@@ -48,4 +48,14 @@ describe('Battleship class', () => {
     carrier.hit();
     expect(carrier.isSunk).toBe(true);
   });
+
+  it('can tell if it was hit', () => {
+    const submarine = new Battleship(2);
+
+    expect(submarine.wasHit).toBe(false);
+
+    submarine.hit();
+
+    expect(submarine.wasHit).toBe(true);
+  });
 });

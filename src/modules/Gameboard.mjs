@@ -303,7 +303,43 @@ export default class Gameboard {
     return false;
   };
 
-  /* get isPatrolBoatSunk() {
+  get isPatrolBoatSunk() {
     return this.patrolBoat.isSunk;
-  } */
+  }
+
+  get wasPatrolBoatHit() {
+    return this.patrolBoat.wasHit;
+  }
+
+  get isSubmarineSunk() {
+    return this.submarine.isSunk;
+  }
+
+  get wasSubmarineHit() {
+    return this.submarine.wasHit;
+  }
+
+  get isDestroyerSunk() {
+    return this.destroyer.isSunk;
+  }
+
+  get wasDestroyerHit() {
+    return this.destroyer.wasHit;
+  }
+
+  get isBattleshipSunk() {
+    return this.battleship.isSunk;
+  }
+
+  get wasBattleshipHit() {
+    return this.battleship.wasHit;
+  }
+
+  get isCarrierSunk() {
+    return this.carrier.isSunk;
+  }
+
+  get wasCarrierHit() {
+    return this.carrier.wasHit;
+  }
 }

@@ -32,4 +32,8 @@ export default class Battleship {
   get isSunk() {
     return this.hits >= this.length;
   }
+
+  get wasHit() {
+    return this.hits > 0;
+  }
 }
