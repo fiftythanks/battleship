@@ -8,6 +8,8 @@ const playerTwoLabel = document.querySelector('.player-two h2');
 
 const whoseTurnWrapper = document.querySelector('p:has(.turn)');
 const whoseTurnDOM = document.querySelector('.turn');
+const handoverDialogOne = document.querySelector('#hand-over-one');
+const handoverDialogTwo = document.querySelector('#hand-over-two');
 
 function initialize(playerOneName, playerTwoName) {
   const game = new Game(playerOneName, playerTwoName);
@@ -87,6 +89,7 @@ function initialize(playerOneName, playerTwoName) {
               playerOneBoardEnemy.style.display = 'none';
 
               if (game.winner === null) {
+                handoverDialogOne.show();
                 whoseTurnDOM.textContent = playerOneName;
                 playerTwoBoard.style.display = 'none';
                 playerTwoBoardEnemy.style.display = 'flex';
@@ -138,6 +141,7 @@ function initialize(playerOneName, playerTwoName) {
               playerTwoBoardEnemy.style.display = 'none';
 
               if (game.winner === null) {
+                handoverDialogTwo.show();
                 whoseTurnDOM.textContent = playerTwoName;
                 playerOneBoard.style.display = 'none';
                 playerOneBoardEnemy.style.display = 'flex';

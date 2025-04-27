@@ -106,6 +106,10 @@ form {
     align-items: center;
   }
 }
+.player-one,
+.player-two {
+  position: relative;
+}
 .player-one .board {
   display: flex;
   flex-direction: column;
@@ -160,4 +164,18 @@ form {
 }
 .square.sunk {
   background: grey;
+}
+.board {
+  position: relative;
+}
+#hand-over-one[open],
+#hand-over-two[open] {
+  width: calc(100% - 3rem);
+  height: calc(100% - 3rem);
+  top: 3rem;
+  left: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
