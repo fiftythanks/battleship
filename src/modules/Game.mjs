@@ -6,6 +6,7 @@ export default class Game {
     this.playerTwo = new Player(name2);
     this.whoseTurn = this.playerOne;
     this.winner = null;
+    this.howManyTurns = 0;
   }
 
   P1PlaceShip = (coord1, coord2) => this.playerOne.placeShip(coord1, coord2);
@@ -17,31 +18,36 @@ export default class Game {
   #attackPlayerTwo = (row, col) => this.playerTwo.receiveAttack(row, col);
 
   makeTurn = (row, col) => {
-    if (this.winner === null) {
-      // if miss, it's null, if hit a ship, it's the ship object
-      let hitResult;
+    if (this.isP1FleetFull && this.isP2FleetFull) {
+      if (this.winner === null) {
+        // if miss, it's null, if hit a ship, it's the ship object
+        let hitResult;
 
-      if (this.whoseTurn === this.playerOne) {
-        hitResult = this.#attackPlayerTwo(row, col);
+        if (this.whoseTurn === this.playerOne) {
+          hitResult = this.#attackPlayerTwo(row, col);
+          this.howManyTurns += 1;
 
-        if (this.playerTwo.hasLost) {
-          this.winner = this.playerOne;
-        } else if (hitResult === null) {
-          this.whoseTurn = this.playerTwo;
+          if (this.playerTwo.hasLost) {
+            this.winner = this.playerOne;
+          } else if (hitResult === null) {
+            this.whoseTurn = this.playerTwo;
+          }
+        } else if (this.whoseTurn === this.playerTwo) {
+          hitResult = this.#attackPlayerOne(row, col);
+          this.howManyTurns += 1;
+
+          if (this.playerOne.hasLost) {
+            this.winner = this.playerTwo;
+          } else if (hitResult === null) {
+            this.whoseTurn = this.playerOne;
+          }
         }
-      } else if (this.whoseTurn === this.playerTwo) {
-        hitResult = this.#attackPlayerOne(row, col);
 
-        if (this.playerOne.hasLost) {
-          this.winner = this.playerTwo;
-        } else if (hitResult === null) {
-          this.whoseTurn = this.playerOne;
-        }
+        return hitResult;
       }
-
-      return hitResult;
+      return this.winner !== null;
     }
-    return this.winner !== null;
+    throw new Error('Incomplete fleet!');
   };
 
   isP1SqOccupied = (row, col) => this.playerOne.isOccupied(row, col);
@@ -189,10 +195,18 @@ export default class Game {
   }
 
   P1ChangeShipPosition = (coord1, coord2) => {
-    this.playerOne.changeShipPosition(coord1, coord2);
+    if (this.howManyTurns === 0) {
+      this.playerOne.changeShipPosition(coord1, coord2);
+    } else {
+      throw new Error('Game has already begun!');
+    }
   };
 
   P2ChangeShipPosition = (coord1, coord2) => {
-    this.playerTwo.changeShipPosition(coord1, coord2);
+    if (this.howManyTurns === 0) {
+      this.playerTwo.changeShipPosition(coord1, coord2);
+    } else {
+      throw new Error('Game has already begun!');
+    }
   };
 }

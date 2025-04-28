@@ -417,4 +417,25 @@ describe('Game class', () => {
       ['F', 10],
     ]);
   });
+
+  it("isn't possible to change the position of a ship if the game has already begun", () => {
+    const game = new Game();
+
+    game.P1PlaceShip(['B', 1], ['F', 1]);
+    game.P1PlaceShip(['C', 4], ['C', 7]);
+    game.P1PlaceShip(['E', 3], ['E', 5]);
+    game.P1PlaceShip(['G', 6], ['H', 6]);
+    game.P1PlaceShip(['J', 4]);
+
+    game.P2PlaceShip(['B', 1], ['F', 1]);
+    game.P2PlaceShip(['C', 4], ['C', 7]);
+    game.P2PlaceShip(['E', 3], ['E', 5]);
+    game.P2PlaceShip(['G', 6], ['H', 6]);
+    game.P2PlaceShip(['J', 4]);
+
+    game.makeTurn('G', 7);
+
+    expect(() => game.P1ChangeShipPosition(['B', 10], ['F', 10])).toThrow();
+    expect(() => game.P2ChangeShipPosition(['G', 8], ['I', 8])).toThrow();
+  });
 });
