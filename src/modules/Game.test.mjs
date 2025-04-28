@@ -371,4 +371,50 @@ describe('Game class', () => {
       ['F', 1],
     ]);
   });
+
+  it('is possible to change the position of a ship', () => {
+    const game = new Game();
+
+    game.P1PlaceShip(['B', 1], ['F', 1]);
+    game.P1PlaceShip(['C', 4], ['C', 7]);
+    game.P1PlaceShip(['E', 3], ['E', 5]);
+    game.P1PlaceShip(['G', 6], ['H', 6]);
+    game.P1PlaceShip(['J', 4]);
+
+    game.P2PlaceShip(['B', 1], ['F', 1]);
+    game.P2PlaceShip(['C', 4], ['C', 7]);
+    game.P2PlaceShip(['E', 3], ['E', 5]);
+    game.P2PlaceShip(['G', 6], ['H', 6]);
+    game.P2PlaceShip(['J', 4]);
+
+    game.P1ChangeShipPosition(['B', 10], ['F', 10]);
+    game.P2ChangeShipPosition(['G', 8], ['I', 8]);
+
+    expect(game.P1CarrierCoords).toStrictEqual([
+      ['B', 10],
+      ['C', 10],
+      ['D', 10],
+      ['E', 10],
+      ['F', 10],
+    ]);
+
+    expect(game.P2DestroyerCoords).toStrictEqual([
+      ['G', 8],
+      ['H', 8],
+      ['I', 8],
+    ]);
+
+    expect(game.isP1SqOccupied('B', 1)).toBeNull();
+    expect(game.isP2SqOccupied('E', 4)).toBeNull();
+
+    game.P2ChangeShipPosition(['F', 6], ['F', 10]);
+
+    expect(game.P2CarrierCoords).toStrictEqual([
+      ['F', 6],
+      ['F', 7],
+      ['F', 8],
+      ['F', 9],
+      ['F', 10],
+    ]);
+  });
 });

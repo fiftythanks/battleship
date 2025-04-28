@@ -94,7 +94,7 @@ export default class Gameboard {
   placeShip = (coord1, coord2) => {
     if (!Array.isArray(coord1) || coord1.length !== 2) {
       throw new TypeError(
-        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, first of which is a capital English alphabet letter from A to J, and second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
+        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, the first of which is a capital English letter from A to J, and the second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
       );
     }
     const [row1, col1] = coord1;
@@ -108,7 +108,7 @@ export default class Gameboard {
       col2 = undefined;
     } else {
       throw new TypeError(
-        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, first of which is a capital English alphabet letter from A to J, and second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
+        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, the first of which is a capital English letter from A to J, and the second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
       );
     }
 
@@ -408,4 +408,181 @@ export default class Gameboard {
   get carrierCoords() {
     return this.carrier.coords;
   }
+
+  changeShipPosition = (coord1, coord2) => {
+    if (!Array.isArray(coord1) || coord1.length !== 2) {
+      throw new TypeError(
+        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, the first of which is a capital English letter from A to J, and the second a number from 1 to 10. coord2 is either an array abiding by the same rules or undefined.',
+      );
+    }
+    const [row1, col1] = coord1;
+    let row2;
+    let col2;
+
+    if (Array.isArray(coord2) && coord2.length === 2) {
+      [row2, col2] = coord2;
+    } else if (coord2 === undefined) {
+      row2 = undefined;
+      col2 = undefined;
+    } else {
+      throw new TypeError(
+        'Incorrect coordinates! Input must be in the form (coord1, coord2), where coord1 is an array of two elements, the first of which is a capital English letter from A to J, and the second is a number from 1 to 10. coord2 is either an array abiding by the same rules or undefine.',
+      );
+    }
+
+    if (
+      !letters.includes(row1) ||
+      typeof col1 !== 'number' ||
+      !Number.isInteger(col1) ||
+      col1 < 1 ||
+      col1 > 10 ||
+      ((row2 !== undefined || col2 !== undefined) &&
+        (!letters.includes(row2) ||
+          typeof col2 !== 'number' ||
+          !Number.isInteger(col2) ||
+          col2 < 1 ||
+          col2 > 10 ||
+          (row1 !== row2 && col1 !== col2)))
+    ) {
+      throw new Error(
+        "Incorrect coordinates. Input must be in the form ([row1, col1], [row2, col2]), where row1, row2 are letters from A to J and col1, col2 are integers from 1 to 10. Ships must be places in one row or in one column, therefore if col1 isn't equal to col2, then row1 = row2, and if row1 isn't equal to row2, then col1 = col2.",
+      );
+    }
+
+    let ship;
+
+    if (row2 === undefined && col2 === undefined) {
+      const row = this.rows[`${row1}`];
+      const col = col1;
+
+      const type = 'patrolBoat';
+
+      if (
+        row[col - 1].occupiedBy !== null &&
+        row[col - 1].occupiedBy.type !== type
+      ) {
+        return null;
+      }
+
+      ship = this[type].instance;
+      const prevCoord = this[type].coords[0];
+      this.rows[prevCoord[0]][prevCoord[1] - 1].occupiedBy = null;
+      row[col - 1].occupiedBy = ship;
+      this[type].coords[0][0] = row1;
+      this[type].coords[0][1] = col;
+    } else if (row1 === row2) {
+      const row = this.rows[`${row1}`];
+
+      const length = col2 - col1 + 1;
+
+      let type;
+      switch (length) {
+        case 5:
+          type = 'carrier';
+          break;
+        case 4:
+          type = 'battleship';
+          break;
+        case 3:
+          type = 'destroyer';
+          break;
+        case 2:
+          type = 'submarine';
+          break;
+        case 1:
+          type = 'patrolBoat';
+          break;
+        default:
+        // do nothing
+      }
+
+      // Check if the squares are already occupied
+      for (let col = col1; col <= col2; col += 1) {
+        if (
+          row[col - 1].occupiedBy !== null &&
+          row[col - 1].occupiedBy.type !== type
+        )
+          return null;
+      }
+
+      const prevCoords = this[type].coords;
+      prevCoords.forEach((coord) => {
+        // eslint-disable-next-line no-shadow
+        const row = coord[0];
+        const col = coord[1] - 1;
+        this.rows[row][col].occupiedBy = null;
+      });
+
+      ship = this[type].instance;
+
+      for (let col = col1, i = 0; col <= col2; col += 1) {
+        row[col - 1].occupiedBy = ship;
+        this[type].coords[i][0] = row1;
+        this[type].coords[i][1] = col;
+        i += 1;
+      }
+    } else {
+      const col = col1;
+
+      const length = letters.indexOf(row2) - letters.indexOf(row1) + 1;
+
+      let type;
+      switch (length) {
+        case 5:
+          type = 'carrier';
+          break;
+        case 4:
+          type = 'battleship';
+          break;
+        case 3:
+          type = 'destroyer';
+          break;
+        case 2:
+          type = 'submarine';
+          break;
+        case 1:
+          type = 'patrolBoat';
+          break;
+        default:
+        // do nothing
+      }
+
+      // Check if the squares are already occupied
+      for (
+        let row = letters.indexOf(row1);
+        row <= letters.indexOf(row2);
+        row += 1
+      ) {
+        if (
+          this.rows[letters[row]][col - 1].occupiedBy !== null &&
+          this.rows[letters[row]][col - 1].occupiedBy.type !== type
+        ) {
+          return null;
+        }
+      }
+
+      const prevCoords = this[type].coords;
+      prevCoords.forEach((coord) => {
+        const row = coord[0];
+        // eslint-disable-next-line no-shadow
+        const col = coord[1] - 1;
+        this.rows[row][col].occupiedBy = null;
+      });
+
+      ship = this[type].instance;
+
+      for (
+        let row = letters.indexOf(row1), i = 0;
+        row <= letters.indexOf(row2);
+        row += 1
+      ) {
+        this.rows[letters[row]][col - 1].occupiedBy = ship;
+        this[type].coords[i][0] = letters[row];
+        this[type].coords[i][1] = col;
+        i += 1;
+      }
+    }
+
+    return ship;
+  };
 }

@@ -172,4 +172,36 @@ describe('Player class', () => {
       ['F', 1],
     ]);
   });
+
+  it('is possible to change the position of a ship', () => {
+    const player = new Player();
+
+    player.placeShip(['B', 1], ['F', 1]);
+    player.placeShip(['C', 4], ['C', 7]);
+    player.placeShip(['E', 3], ['E', 5]);
+    player.placeShip(['G', 6], ['H', 6]);
+    player.placeShip(['J', 4]);
+
+    player.changeShipPosition(['B', 10], ['F', 10]);
+
+    expect(player.carrierCoords).toStrictEqual([
+      ['B', 10],
+      ['C', 10],
+      ['D', 10],
+      ['E', 10],
+      ['F', 10],
+    ]);
+
+    expect(player.isOccupied('B', 1)).toBeNull();
+
+    player.changeShipPosition(['F', 6], ['F', 10]);
+
+    expect(player.carrierCoords).toStrictEqual([
+      ['F', 6],
+      ['F', 7],
+      ['F', 8],
+      ['F', 9],
+      ['F', 10],
+    ]);
+  });
 });

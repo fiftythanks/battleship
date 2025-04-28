@@ -187,4 +187,12 @@ export default class Game {
   get P2CarrierCoords() {
     return this.playerTwo.carrierCoords;
   }
+
+  P1ChangeShipPosition = (coord1, coord2) => {
+    this.playerOne.changeShipPosition(coord1, coord2);
+  };
+
+  P2ChangeShipPosition = (coord1, coord2) => {
+    this.playerTwo.changeShipPosition(coord1, coord2);
+  };
 }

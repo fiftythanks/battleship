@@ -89,4 +89,8 @@ export default class Player {
   get carrierCoords() {
     return this.gameboard.carrierCoords;
   }
+
+  changeShipPosition = (coord1, coord2) => {
+    this.gameboard.changeShipPosition(coord1, coord2);
+  };
 }

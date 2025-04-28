@@ -231,4 +231,36 @@ describe('Gameboard class', () => {
       ['F', 1],
     ]);
   });
+
+  it('is possible to change the position of a ship', () => {
+    const board = new Gameboard();
+
+    board.placeShip(['B', 1], ['F', 1]);
+    board.placeShip(['C', 4], ['C', 7]);
+    board.placeShip(['E', 3], ['E', 5]);
+    board.placeShip(['G', 6], ['H', 6]);
+    board.placeShip(['J', 4]);
+
+    board.changeShipPosition(['B', 10], ['F', 10]);
+
+    expect(board.carrierCoords).toStrictEqual([
+      ['B', 10],
+      ['C', 10],
+      ['D', 10],
+      ['E', 10],
+      ['F', 10],
+    ]);
+
+    expect(board.isOccupied('B', 1)).toBeNull();
+
+    board.changeShipPosition(['F', 6], ['F', 10]);
+
+    expect(board.carrierCoords).toStrictEqual([
+      ['F', 6],
+      ['F', 7],
+      ['F', 8],
+      ['F', 9],
+      ['F', 10],
+    ]);
+  });
 });
