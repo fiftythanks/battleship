@@ -288,4 +288,32 @@ describe('Gameboard class', () => {
     expect(() => board.changeShipPosition(['B', 2], ['F', 2])).toThrow();
     expect(() => board.changeShipPosition(['D', 4], ['D', 7])).toThrow();
   });
+
+  it('should be able to tell which squares are available for placement', () => {
+    const board = new Gameboard();
+
+    board.placeShip(['B', 1], ['F', 1]);
+    board.placeShip(['C', 4], ['C', 7]);
+    board.placeShip(['E', 3], ['E', 5]);
+    board.placeShip(['G', 6], ['H', 6]);
+    board.placeShip(['J', 4]);
+
+    expect(board.openForPlacement(['B', 1])).toBe(false);
+    expect(board.openForPlacement(['A', 1])).toBe(false);
+    expect(board.openForPlacement(['E', 9])).toBe(true);
+  });
+
+  it('should be able to tell whether each square is avalable for placement in an array of squares', () => {
+    const board = new Gameboard();
+
+    board.placeShip(['B', 1], ['F', 1]);
+    board.placeShip(['C', 4], ['C', 7]);
+    board.placeShip(['E', 3], ['E', 5]);
+    board.placeShip(['G', 6], ['H', 6]);
+    board.placeShip(['J', 4]);
+
+    expect(board.openForPlacement(['B', 1], ['A', 1], ['E', 9])).toBe(false);
+    expect(board.openForPlacement(['G', 6], ['B', 1], ['E', 3])).toBe(false);
+    expect(board.openForPlacement(['C', 9], ['H', 8], ['I', 1])).toBe(true);
+  });
 });

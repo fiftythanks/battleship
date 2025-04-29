@@ -30,6 +30,14 @@ import Battleship from './Battleship';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
+function arrIncludes(array, coord) {
+  return (
+    array.filter(
+      (arrCoord) => arrCoord[0] === coord[0] && arrCoord[1] === coord[1],
+    ).length > 0
+  );
+}
+
 export default class Gameboard {
   constructor() {
     this.rows = {};
@@ -633,5 +641,89 @@ export default class Gameboard {
     }
 
     return ship;
+  };
+
+  #availableSquares = () => {
+    const allSquares = [];
+    let i = 0;
+    Object.values(this.rows).forEach((row) => {
+      for (let j = 0; j < row.length; j += 1) {
+        allSquares.push([letters[i], j + 1]);
+      }
+      i += 1;
+    });
+
+    const directlyUnavailableSquares = allSquares.filter(
+      (coord) =>
+        arrIncludes(this.carrierCoords, coord) ||
+        arrIncludes(this.battleshipCoords, coord) ||
+        arrIncludes(this.destroyerCoords, coord) ||
+        arrIncludes(this.submarineCoords, coord) ||
+        arrIncludes(this.patrolBoatCoords, coord),
+    );
+
+    let unavailableSquares = [];
+
+    directlyUnavailableSquares.forEach(([row, col]) => {
+      unavailableSquares.push([row, col]);
+
+      // eslint-disable-next-line no-shadow
+      const i = letters.indexOf(row);
+      const j = col;
+
+      if (i - 1 >= 0 && j - 1 >= 1) {
+        unavailableSquares.push([letters[i - 1], j - 1]);
+      }
+
+      if (i - 1 >= 0) {
+        unavailableSquares.push([letters[i - 1], j]);
+      }
+
+      if (i - 1 >= 0 && j + 1 <= 10) {
+        unavailableSquares.push([letters[i - 1], j + 1]);
+      }
+
+      if (j - 1 >= 1) {
+        unavailableSquares.push([letters[i], j - 1]);
+      }
+
+      if (j + 1 <= 10) {
+        unavailableSquares.push([letters[i], j + 1]);
+      }
+
+      if (i + 1 < 10 && j - 1 >= 1) {
+        unavailableSquares.push([letters[i + 1], j - 1]);
+      }
+
+      if (i + 1 < 10 && j + 1 <= 10) {
+        unavailableSquares.push([letters[i + 1], j + 1]);
+      }
+    });
+
+    const availableSquares = allSquares.filter(
+      (coord) => !arrIncludes(unavailableSquares, coord),
+    );
+
+    return availableSquares;
+  };
+
+  openForPlacement = ([row, col], ...squares) => {
+    const availableSquares = this.#availableSquares();
+
+    if (!arrIncludes(availableSquares, [row, col])) {
+      return false;
+    }
+
+    // If there are more than one pair of coordinates provided
+    if (squares.length > 0) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [letter, column] of squares) {
+        if (!arrIncludes(availableSquares, [letter, column])) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   };
 }

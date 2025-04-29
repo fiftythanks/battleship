@@ -209,4 +209,10 @@ export default class Game {
       throw new Error('Game has already begun!');
     }
   };
+
+  P1OpenForPlacement = ([row, col], ...moreSquares) =>
+    this.playerOne.openForPlacement([row, col], ...moreSquares);
+
+  P2OpenForPlacement = ([row, col], ...moreSquares) =>
+    this.playerTwo.openForPlacement([row, col], ...moreSquares);
 }
