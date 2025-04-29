@@ -457,11 +457,28 @@ export default class Gameboard {
 
       const type = 'patrolBoat';
 
-      if (
-        row[col - 1].occupiedBy !== null &&
-        row[col - 1].occupiedBy.type !== type
-      ) {
-        return null;
+      // Check if the square or the surrounding squares are occupied
+      for (let i = row1 - 1; i <= row1 + 1; i += 1) {
+        for (let j = col - 1; j <= col + 1; j += 1) {
+          if (
+            (this.rows[letters[i]] === undefined ||
+              this.rows[letters[i]][j - 1] === undefined) &&
+            j !== col1 - 1 &&
+            j !== col2 + 1 &&
+            i !== letters.indexOf(row1) - 1 &&
+            i !== letters.indexOf(row1) + 1
+          ) {
+            throw new Error('Incorrect positioning!');
+          }
+          if (
+            this.rows[letters[i]] !== undefined &&
+            this.rows[letters[i]][j - 1] !== undefined &&
+            this.rows[letters[i]][j - 1].occupiedBy !== null &&
+            this.rows[letters[i]][j - 1].occupiedBy.type !== type
+          ) {
+            throw new Error('Occupied!');
+          }
+        }
       }
 
       ship = this[type].instance;
@@ -497,12 +514,30 @@ export default class Gameboard {
       }
 
       // Check if the squares are already occupied
-      for (let col = col1; col <= col2; col += 1) {
-        if (
-          row[col - 1].occupiedBy !== null &&
-          row[col - 1].occupiedBy.type !== type
-        )
-          return null;
+      for (let j = col1 - 1; j <= col2 + 1; j += 1) {
+        for (
+          let i = letters.indexOf(row1) - 1;
+          i <= letters.indexOf(row1) + 1;
+          i += 1
+        ) {
+          if (
+            (this.rows[letters[i]] === undefined ||
+              this.rows[letters[i]][j - 1] === undefined) &&
+            j !== col1 - 1 &&
+            j !== col2 + 1 &&
+            i !== letters.indexOf(row1) - 1 &&
+            i !== letters.indexOf(row1) + 1
+          ) {
+            throw new Error('Incorrect positioning!');
+          }
+          if (
+            this.rows[letters[i]] !== undefined &&
+            this.rows[letters[i]][j - 1] !== undefined &&
+            this.rows[letters[i]][j - 1].occupiedBy !== null &&
+            this.rows[letters[i]][j - 1].occupiedBy.type !== type
+          )
+            throw new Error('Occupied!');
+        }
       }
 
       const prevCoords = this[type].coords;
@@ -549,15 +584,29 @@ export default class Gameboard {
 
       // Check if the squares are already occupied
       for (
-        let row = letters.indexOf(row1);
-        row <= letters.indexOf(row2);
-        row += 1
+        let i = letters.indexOf(row1) - 1;
+        i <= letters.indexOf(row2) + 1;
+        i += 1
       ) {
-        if (
-          this.rows[letters[row]][col - 1].occupiedBy !== null &&
-          this.rows[letters[row]][col - 1].occupiedBy.type !== type
-        ) {
-          return null;
+        for (let j = col - 1; j <= col + 1; j += 1) {
+          if (
+            (this.rows[letters[i]] === undefined ||
+              this.rows[letters[i]][j - 1] === undefined) &&
+            j !== col1 - 1 &&
+            j !== col2 + 1 &&
+            i !== letters.indexOf(row1) - 1 &&
+            i !== letters.indexOf(row1) + 1
+          ) {
+            throw new Error('Incorrect positioning!');
+          }
+          if (
+            this.rows[letters[i]] !== undefined &&
+            this.rows[letters[i]][j - 1] !== undefined &&
+            this.rows[letters[i]][j - 1].occupiedBy !== null &&
+            this.rows[letters[i]][j - 1].occupiedBy.type !== type
+          ) {
+            throw new Error('Occupied!');
+          }
         }
       }
 

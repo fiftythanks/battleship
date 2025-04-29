@@ -253,14 +253,39 @@ describe('Gameboard class', () => {
 
     expect(board.isOccupied('B', 1)).toBeNull();
 
-    board.changeShipPosition(['F', 6], ['F', 10]);
+    board.changeShipPosition(['D', 9], ['H', 9]);
 
     expect(board.carrierCoords).toStrictEqual([
-      ['F', 6],
-      ['F', 7],
-      ['F', 8],
+      ['D', 9],
+      ['E', 9],
       ['F', 9],
-      ['F', 10],
+      ['G', 9],
+      ['H', 9],
     ]);
+  });
+
+  it('is impossible to change the position of a ship to a position that is already occupied at least partially by another ship', () => {
+    const board = new Gameboard();
+
+    board.placeShip(['B', 1], ['F', 1]);
+    board.placeShip(['C', 4], ['C', 7]);
+    board.placeShip(['E', 3], ['E', 5]);
+    board.placeShip(['G', 6], ['H', 6]);
+    board.placeShip(['J', 4]);
+
+    expect(() => board.changeShipPosition(['D', 3], ['H', 3])).toThrow();
+  });
+
+  it('is impossible to change the position of a ship to a position that is less than one square far from any other ship', () => {
+    const board = new Gameboard();
+
+    board.placeShip(['B', 1], ['F', 1]);
+    board.placeShip(['C', 4], ['C', 7]);
+    board.placeShip(['E', 3], ['E', 5]);
+    board.placeShip(['G', 6], ['H', 6]);
+    board.placeShip(['J', 4]);
+
+    expect(() => board.changeShipPosition(['B', 2], ['F', 2])).toThrow();
+    expect(() => board.changeShipPosition(['D', 4], ['D', 7])).toThrow();
   });
 });

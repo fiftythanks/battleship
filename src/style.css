@@ -73,6 +73,8 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  /* For drag and drop. When a ship is dragged, a div is created, and it must be put somewhere. So it's put outside the visible area. */
+  overflow: hidden;
 }
 button:hover {
   cursor: pointer;
@@ -137,6 +139,7 @@ form {
 }
 .square {
   width: 3rem;
+  height: 3rem;
   flex-shrink: 0;
   outline: 1px solid black;
 }
@@ -169,7 +172,11 @@ form {
   position: relative;
 }
 #hand-over-one[open],
-#hand-over-two[open] {
+#hand-over-two[open],
+#hand-over-one-enemy[open],
+#hand-over-two-enemy[open],
+#ready-one[open],
+#ready-two[open] {
   width: calc(100% - 3rem);
   height: calc(100% - 3rem);
   top: 3rem;

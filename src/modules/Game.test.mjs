@@ -11,6 +11,20 @@ describe('Game class', () => {
   });
 
   it('can attack players by turn without getting input on which player to attack', () => {
+    const game = new Game();
+
+    game.P1PlaceShip(['B', 1], ['F', 1]);
+    game.P1PlaceShip(['C', 5], ['C', 8]);
+    game.P1PlaceShip(['E', 3], ['E', 5]);
+    game.P1PlaceShip(['G', 6], ['H', 6]);
+    game.P1PlaceShip(['J', 4]);
+
+    game.P2PlaceShip(['B', 1], ['F', 1]);
+    game.P2PlaceShip(['C', 5], ['C', 8]);
+    game.P2PlaceShip(['E', 3], ['E', 5]);
+    game.P2PlaceShip(['G', 6], ['H', 6]);
+    game.P2PlaceShip(['J', 4]);
+
     // Expected behavior: if hit, return a Battleship instance, if miss, return null, if attack a square that has already been attacked, throw
 
     // First turn, player1
@@ -46,6 +60,24 @@ describe('Game class', () => {
   });
 
   it('can check if a square has been attacked already', () => {
+    const game = new Game();
+
+    game.P1PlaceShip(['B', 1], ['F', 1]);
+    game.P1PlaceShip(['C', 4], ['C', 7]);
+    game.P1PlaceShip(['E', 3], ['E', 5]);
+    game.P1PlaceShip(['G', 6], ['H', 6]);
+    game.P1PlaceShip(['J', 4]);
+
+    game.P2PlaceShip(['B', 1], ['F', 1]);
+    game.P2PlaceShip(['C', 4], ['C', 7]);
+    game.P2PlaceShip(['E', 3], ['E', 5]);
+    game.P2PlaceShip(['G', 6], ['H', 6]);
+    game.P2PlaceShip(['J', 4]);
+
+    game.makeTurn('C', 4);
+    game.makeTurn('C', 3);
+    game.makeTurn('C', 4);
+
     expect(game.P1WasAttacked('C', 4)).toBe(true);
     expect(game.P1WasAttacked('F', 5)).toBe(false);
     expect(game.P2WasAttacked('C', 4)).toBe(true);
@@ -407,14 +439,14 @@ describe('Game class', () => {
     expect(game.isP1SqOccupied('B', 1)).toBeNull();
     expect(game.isP2SqOccupied('E', 4)).toBeNull();
 
-    game.P2ChangeShipPosition(['F', 6], ['F', 10]);
+    game.P1ChangeShipPosition(['D', 9], ['H', 9]);
 
-    expect(game.P2CarrierCoords).toStrictEqual([
-      ['F', 6],
-      ['F', 7],
-      ['F', 8],
+    expect(game.P1CarrierCoords).toStrictEqual([
+      ['D', 9],
+      ['E', 9],
       ['F', 9],
-      ['F', 10],
+      ['G', 9],
+      ['H', 9],
     ]);
   });
 
@@ -437,5 +469,43 @@ describe('Game class', () => {
 
     expect(() => game.P1ChangeShipPosition(['B', 10], ['F', 10])).toThrow();
     expect(() => game.P2ChangeShipPosition(['G', 8], ['I', 8])).toThrow();
+  });
+
+  it('it can tell when someone wins', () => {
+    const game = new Game();
+
+    game.P1PlaceShip(['B', 1], ['F', 1]);
+    game.P1PlaceShip(['C', 4], ['C', 7]);
+    game.P1PlaceShip(['E', 3], ['E', 5]);
+    game.P1PlaceShip(['G', 6], ['H', 6]);
+    game.P1PlaceShip(['J', 4]);
+
+    game.P2PlaceShip(['B', 1], ['F', 1]);
+    game.P2PlaceShip(['C', 4], ['C', 7]);
+    game.P2PlaceShip(['E', 3], ['E', 5]);
+    game.P2PlaceShip(['G', 6], ['H', 6]);
+    game.P2PlaceShip(['J', 4]);
+
+    game.makeTurn('B', 1);
+    game.makeTurn('C', 1);
+    game.makeTurn('D', 1);
+    game.makeTurn('E', 1);
+    game.makeTurn('F', 1);
+
+    game.makeTurn('C', 4);
+    game.makeTurn('C', 5);
+    game.makeTurn('C', 6);
+    game.makeTurn('C', 7);
+
+    game.makeTurn('E', 3);
+    game.makeTurn('E', 4);
+    game.makeTurn('E', 5);
+
+    game.makeTurn('G', 6);
+    game.makeTurn('H', 6);
+
+    game.makeTurn('J', 4);
+
+    expect(game.winner).toBe(game.playerOne);
   });
 });

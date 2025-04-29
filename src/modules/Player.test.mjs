@@ -194,14 +194,14 @@ describe('Player class', () => {
 
     expect(player.isOccupied('B', 1)).toBeNull();
 
-    player.changeShipPosition(['F', 6], ['F', 10]);
+    player.changeShipPosition(['D', 9], ['H', 9]);
 
     expect(player.carrierCoords).toStrictEqual([
-      ['F', 6],
-      ['F', 7],
-      ['F', 8],
+      ['D', 9],
+      ['E', 9],
       ['F', 9],
-      ['F', 10],
+      ['G', 9],
+      ['H', 9],
     ]);
   });
 });
