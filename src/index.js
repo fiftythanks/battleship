@@ -248,6 +248,7 @@ function initialize(playerOneName, playerTwoName) {
           e.preventDefault();
 
           // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+          if (currentlyDragged === null) return;
           const [shipLength, orientation, index] = currentlyDragged;
 
           const newSquares = [];
@@ -292,6 +293,7 @@ function initialize(playerOneName, playerTwoName) {
         e.preventDefault();
 
         // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+        if (currentlyDragged === null) return;
         const [shipLength, orientation, index] = currentlyDragged;
 
         const leftSquares = [];
@@ -357,13 +359,25 @@ function initialize(playerOneName, playerTwoName) {
       playerOneRow[j].addEventListener('drop', (e) => {
         if (!P1Ready) {
           e.preventDefault();
-          // [length, orientation, index in the array of ship squares, [...original squares' IDs]]
-          const [shipLength, orientation, index, originalSquareCoords] =
-            JSON.parse(e.dataTransfer.getData('text/plain'));
-          const originalSquares = originalSquareCoords.map(
-            (coord) =>
-              playerOneRows[coord[0]].querySelectorAll('.square')[coord[1]],
-          );
+
+          let shipLength;
+          let orientation;
+          let index;
+          let originalSquareCoords;
+          let originalSquares;
+
+          try {
+            // [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+            [shipLength, orientation, index, originalSquareCoords] = JSON.parse(
+              e.dataTransfer.getData('text/plain'),
+            );
+            originalSquares = originalSquareCoords.map(
+              (coord) =>
+                playerOneRows[coord[0]].querySelectorAll('.square')[coord[1]],
+            );
+          } catch {
+            return;
+          }
 
           try {
             const newSquares = [];
@@ -483,6 +497,7 @@ function initialize(playerOneName, playerTwoName) {
           e.preventDefault();
 
           // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+          if (currentlyDragged === null) return;
           const [shipLength, orientation, index] = currentlyDragged;
 
           const newSquares = [];
@@ -527,6 +542,7 @@ function initialize(playerOneName, playerTwoName) {
         e.preventDefault();
 
         // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+        if (currentlyDragged === null) return;
         const [shipLength, orientation, index] = currentlyDragged;
 
         const leftSquares = [];
@@ -592,13 +608,25 @@ function initialize(playerOneName, playerTwoName) {
       playerTwoRow[j].addEventListener('drop', (e) => {
         if (!P2Ready) {
           e.preventDefault();
-          // [length, orientation, index in the array of ship squares, [...original squares' IDs]]
-          const [shipLength, orientation, index, originalSquareCoords] =
-            JSON.parse(e.dataTransfer.getData('text/plain'));
-          const originalSquares = originalSquareCoords.map(
-            (coord) =>
-              playerTwoRows[coord[0]].querySelectorAll('.square')[coord[1]],
-          );
+
+          let shipLength;
+          let orientation;
+          let index;
+          let originalSquareCoords;
+          let originalSquares;
+
+          try {
+            // [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+            [shipLength, orientation, index, originalSquareCoords] = JSON.parse(
+              e.dataTransfer.getData('text/plain'),
+            );
+            originalSquares = originalSquareCoords.map(
+              (coord) =>
+                playerTwoRows[coord[0]].querySelectorAll('.square')[coord[1]],
+            );
+          } catch {
+            return;
+          }
 
           try {
             const newSquares = [];
