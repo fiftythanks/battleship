@@ -80,7 +80,7 @@ function initialize(playerOneName, playerTwoName) {
 
   // A workaround for a `dragenter` event handler below. It's necessary because you can't read the `dataTransfer` object data in anything but `dragstart` and `drop` event handlers.
   let currentlyDragged = null;
-  let currentlyDraggedOver = [];
+  let currentlyDraggedOver = null;
 
   // row and col like on the board
   function addP1DragEventListener(element, row, col) {
@@ -355,6 +355,9 @@ function initialize(playerOneName, playerTwoName) {
       });
 
       playerOneRow[j].addEventListener('drop', (e) => {
+        currentlyDragged = null;
+        currentlyDraggedOver = null;
+
         if (!P1Ready) {
           e.preventDefault();
 
@@ -599,6 +602,9 @@ function initialize(playerOneName, playerTwoName) {
       });
 
       playerTwoRow[j].addEventListener('drop', (e) => {
+        currentlyDragged = null;
+        currentlyDraggedOver = null;
+
         if (!P2Ready) {
           e.preventDefault();
 
