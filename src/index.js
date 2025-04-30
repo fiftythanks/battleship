@@ -385,17 +385,22 @@ function initialize(playerOneName, playerTwoName) {
             }
 
             // If this method throws, the dragging should be reversed
-            game.P1ChangeShipPosition(newCoords[0], newCoords.at(-1));
+            const output = game.P1ChangeShipPosition(
+              newCoords[0],
+              newCoords.at(-1),
+            );
 
             originalSquares.forEach((square) => {
               // eslint-disable-next-line no-param-reassign
               square.ondragstart = null;
+              square.setAttribute('draggable', 'false');
             });
 
             // eslint-disable-next-line no-shadow
             newSquares.forEach((square, index) => {
               const coordOnBoard = newCoords[index];
               square.classList.add('occupied');
+              square.setAttribute('draggable', 'true');
               addP1DragEventListener(square, coordOnBoard[0], coordOnBoard[1]);
             });
           } catch {
