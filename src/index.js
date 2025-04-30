@@ -653,6 +653,7 @@ function initialize(playerOneName, playerTwoName) {
             originalSquares.forEach((square) => {
               // eslint-disable-next-line no-param-reassign
               square.ondragstart = null;
+              square.setAttribute('draggable', 'false');
             });
 
             // eslint-disable-next-line no-shadow
