@@ -280,10 +280,8 @@ function initialize(playerOneName, playerTwoName) {
           currentlyDraggedOver = [[...newSquares], [...newCoords]];
 
           if (game.P1OpenForPlacement(newCoords[0], newCoords.at(-1))) {
-            newSquares.forEach((square, k) => {
-              const coordOnBoard = newCoords[k];
+            newSquares.forEach((square) => {
               square.classList.add('available');
-              addP1DragEventListener(square, coordOnBoard[0], coordOnBoard[1]);
             });
           }
         }
@@ -399,10 +397,7 @@ function initialize(playerOneName, playerTwoName) {
             }
 
             // If this method throws, the dragging should be reversed
-            const output = game.P1ChangeShipPosition(
-              newCoords[0],
-              newCoords.at(-1),
-            );
+            game.P1ChangeShipPosition(newCoords[0], newCoords.at(-1));
 
             originalSquares.forEach((square) => {
               // eslint-disable-next-line no-param-reassign
@@ -529,10 +524,8 @@ function initialize(playerOneName, playerTwoName) {
           currentlyDraggedOver = [[...newSquares], [...newCoords]];
 
           if (game.P2OpenForPlacement(newCoords[0], newCoords.at(-1))) {
-            newSquares.forEach((square, k) => {
-              const coordOnBoard = newCoords[k];
+            newSquares.forEach((square) => {
               square.classList.add('available');
-              addP2DragEventListener(square, coordOnBoard[0], coordOnBoard[1]);
             });
           }
         }
