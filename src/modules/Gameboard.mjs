@@ -1,3 +1,5 @@
+/* eslint-disable no-labels */
+/* eslint-disable no-continue */
 /*
   2. Create a Gameboard class/factory.
 
@@ -662,7 +664,7 @@ export default class Gameboard {
         arrIncludes(this.patrolBoatCoords, coord),
     );
 
-    let unavailableSquares = [];
+    const unavailableSquares = [];
 
     directlyUnavailableSquares.forEach(([row, col]) => {
       unavailableSquares.push([row, col]);
@@ -695,6 +697,10 @@ export default class Gameboard {
         unavailableSquares.push([letters[i + 1], j - 1]);
       }
 
+      if (i + 1 < 10) {
+        unavailableSquares.push([letters[i + 1], j]);
+      }
+
       if (i + 1 < 10 && j + 1 <= 10) {
         unavailableSquares.push([letters[i + 1], j + 1]);
       }
@@ -707,21 +713,144 @@ export default class Gameboard {
     return availableSquares;
   };
 
-  openForPlacement = ([row, col], ...squares) => {
-    const availableSquares = this.#availableSquares();
-
-    if (!arrIncludes(availableSquares, [row, col])) {
-      return false;
+  openForPlacement = (coord1, coord2) => {
+    if (
+      coord2 !== undefined &&
+      !(coord1[0] === coord2[0] || coord1[1] === coord2[1])
+    ) {
+      throw new Error(
+        'Incorrect input! Arguments must be either one pair of coordinates or the first and the last pair of coordinates.',
+      );
     }
 
-    // If there are more than one pair of coordinates provided
-    if (squares.length > 0) {
-      // eslint-disable-next-line no-restricted-syntax
-      for (const [letter, column] of squares) {
-        if (!arrIncludes(availableSquares, [letter, column])) {
-          return false;
+    let length;
+    if (coord2 !== undefined) {
+      length =
+        coord1[0] !== coord2[0]
+          ? letters.indexOf(coord2[0]) - letters.indexOf(coord1[0]) + 1
+          : coord2[1] - coord1[1] + 1;
+    } else {
+      length = 1;
+    }
+
+    let type;
+    switch (length) {
+      case 1:
+        type = 'patrolBoat';
+        break;
+      case 2:
+        type = 'submarine';
+        break;
+      case 3:
+        type = 'destroyer';
+        break;
+      case 4:
+        type = 'battleship';
+        break;
+      case 5:
+        type = 'carrier';
+        break;
+      default:
+      // do nothing
+    }
+
+    const contiguousAvailSqs = [];
+
+    const shipCoords = this[`${type}Coords`];
+    shipCoords.forEach((coord) => {
+      // eslint-disable-next-line no-shadow
+      const i = letters.indexOf(coord[0]);
+      const j = coord[1];
+
+      /* 
+        Let's say we have this board:
+
+          1 2 3 4 5 6 7 8 9 10
+        A • • • • • • • • • +
+        B + • • • • • • • • •
+        C + • • + + + + • • • 
+        D + • • • • • • • • •
+        E + • • • • • • • • •
+        F + • • • + • • • • •
+        G • • • • + • • + + •
+        H • • • • + • • • • •
+        I • • • • • • • • • •
+        J • • • • • • • • • •
+
+        shipCords = [['C', 4], ['C', 5], ['C', 6], ['C', 7]].
+
+        And we are currently on ['C', 4], i.e. coord = ['C', 4].
+
+        Then, the loop below will check all squares in the area (('A', 2), ('A', 6), ('E', 2), ('E', 6)):
+        
+          1 2 3 4 5 6 7 8 9 10
+        A • + + + + + • • • •
+        B • + + + + + • • • •
+        C • + + + + + • • • • 
+        D • + + + + + • • • •
+        E • + + + + + • • • •
+        F • • • • • • • • • •
+        G • • • • • • • • • •
+        H • • • • • • • • • •
+        I • • • • • • • • • •
+        J • • • • • • • • • •
+
+        This is done to make sure that the method gives all available squares, including the squares surrounding the ship when there's no other ship close to it. 
+
+        I fully realize the inefficiency of this algorithm. I'm planning on replacing it to something better in the future.
+      */
+      for (let row = i - 1; row <= i + 1; row += 1) {
+        if (row >= 0 && row <= 9) {
+          // eslint-disable-next-line no-restricted-syntax
+          target: for (let col = j - 1; col <= j + 1; col += 1) {
+            if (col >= 1 && col <= 10) {
+              for (let k = row - 1; k <= row + 1; k += 1) {
+                if (k < 0 || k > 9) continue;
+                for (let m = col - 1; m <= col + 1; m += 1) {
+                  if (m < 1 || m > 10 || (k === i && m === j)) continue;
+                  const letter = letters[k];
+                  const output = this.isOccupied(letter, m);
+
+                  if (output !== null && output !== this[type].instance) {
+                    // We are interested only in the surrounding the ship squares.
+                    continue target;
+                  }
+                }
+              }
+
+              contiguousAvailSqs.push([letters[row], col]);
+            }
+          }
         }
       }
+    });
+
+    const contigAvailSqsUnique = [];
+    contiguousAvailSqs.forEach((square) => {
+      if (!arrIncludes(contigAvailSqsUnique, square)) {
+        contigAvailSqsUnique.push(square);
+      }
+    });
+
+    const availableSquares = [
+      ...this.#availableSquares(),
+      ...contigAvailSqsUnique,
+    ];
+
+    if (coord2 !== undefined) {
+      for (
+        let i = letters.indexOf(coord1[0]);
+        i <= letters.indexOf(coord2[0]);
+        i += 1
+      ) {
+        for (let j = coord1[1]; j <= coord2[1]; j += 1) {
+          if (!arrIncludes(availableSquares, [letters[i], j])) {
+            return false;
+          }
+        }
+      }
+    } else if (!arrIncludes(availableSquares, [coord1[0], coord1[1]])) {
+      return false;
     }
 
     return true;

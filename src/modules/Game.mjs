@@ -210,9 +210,9 @@ export default class Game {
     }
   };
 
-  P1OpenForPlacement = ([row, col], ...moreSquares) =>
-    this.playerOne.openForPlacement([row, col], ...moreSquares);
+  P1OpenForPlacement = (coord1, coord2) =>
+    this.playerOne.openForPlacement(coord1, coord2);
 
-  P2OpenForPlacement = ([row, col], ...moreSquares) =>
-    this.playerTwo.openForPlacement([row, col], ...moreSquares);
+  P2OpenForPlacement = (coord1, coord2) =>
+    this.playerTwo.openForPlacement(coord1, coord2);
 }

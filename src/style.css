@@ -156,7 +156,8 @@ form {
 .turn-wrapper {
   font-size: 1.5rem;
 }
-.square.occupied {
+.square.occupied,
+.square.available {
   background-color: black;
 }
 .square.hit {

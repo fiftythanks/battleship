@@ -78,6 +78,10 @@ function initialize(playerOneName, playerTwoName) {
   game.P2PlaceShip(['G', 6], ['H', 6]);
   game.P2PlaceShip(['J', 4]);
 
+  // A workaround for a `dragenter` event handler below. It's necessary because you can't read the `dataTransfer` object data in anything but `dragstart` and `drop` event handlers.
+  let currentlyDragged = null;
+  let currentlyDraggedOver = [];
+
   // row and col like on the board
   function addP1DragEventListener(element, row, col) {
     function dragHandler(e) {
@@ -128,6 +132,7 @@ function initialize(playerOneName, playerTwoName) {
 
         data.push(index, originalSquares);
         dataList.setData('text/plain', JSON.stringify(data));
+        currentlyDragged = data;
 
         // Calculate offsets for drag image
         const rect = e.target.getBoundingClientRect();
@@ -200,6 +205,7 @@ function initialize(playerOneName, playerTwoName) {
 
         data.push(index, originalSquares);
         dataList.setData('text/plain', JSON.stringify(data));
+        currentlyDragged = data;
 
         // Calculate offsets for drag image
         const rect = e.target.getBoundingClientRect();
@@ -236,11 +242,118 @@ function initialize(playerOneName, playerTwoName) {
           e.preventDefault();
         }
       });
+
       playerOneRow[j].addEventListener('dragenter', (e) => {
         if (!P1Ready) {
           e.preventDefault();
+
+          // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+          const [shipLength, orientation, index] = currentlyDragged;
+
+          const newSquares = [];
+          // As on the board ('A', 3; 'B', 1 etc.)
+          const newCoords = [];
+
+          if (orientation === 'horizontal') {
+            // Check for not sticking out of the board's boundaries
+            for (let k = j - index; k < j - index + shipLength; k += 1) {
+              if (k > 9 || k < 0) return;
+            }
+
+            for (let k = j - index; k < j - index + shipLength; k += 1) {
+              newSquares.push(playerOneRow[k]);
+              newCoords.push([letter, k + 1]);
+            }
+          } else {
+            // Check for not sticking out of the board's boundaries
+            for (let l = i - index; l < i - index + shipLength; l += 1) {
+              if (l > 9 || l < 0) return;
+            }
+
+            for (let l = i - index; l < i - index + shipLength; l += 1) {
+              newSquares.push(playerOneRows[l].querySelectorAll('.square')[j]);
+              newCoords.push([letters[l], j + 1]);
+            }
+          }
+
+          currentlyDraggedOver = [[...newSquares], [...newCoords]];
+
+          if (game.P1OpenForPlacement(newCoords[0], newCoords.at(-1))) {
+            newSquares.forEach((square, k) => {
+              const coordOnBoard = newCoords[k];
+              square.classList.add('available');
+              addP1DragEventListener(square, coordOnBoard[0], coordOnBoard[1]);
+            });
+          }
         }
       });
+
+      playerOneRow[j].addEventListener('dragleave', (e) => {
+        e.preventDefault();
+
+        // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+        const [shipLength, orientation, index] = currentlyDragged;
+
+        const leftSquares = [];
+
+        if (orientation === 'horizontal') {
+          // Check for not sticking out of the board's boundaries
+          for (let k = j - index; k < j - index + shipLength; k += 1) {
+            if (k > 9 || k < 0) return;
+          }
+
+          for (let k = j - index; k < j - index + shipLength; k += 1) {
+            leftSquares.push(playerOneRow[k]);
+          }
+        } else {
+          // Check for not sticking out of the board's boundaries
+          for (let l = i - index; l < i - index + shipLength; l += 1) {
+            if (l > 9 || l < 0) return;
+          }
+
+          for (let l = i - index; l < i - index + shipLength; l += 1) {
+            leftSquares.push(playerOneRows[l].querySelectorAll('.square')[j]);
+          }
+        }
+
+        const sqsCurDraggedOver = currentlyDraggedOver[0];
+        const curDraggedOverCoords = currentlyDraggedOver[1];
+
+        // This is for the case when a dragged ship has just met a boundary
+        let boundary = true;
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const square of leftSquares) {
+          if (!sqsCurDraggedOver.includes(square)) {
+            boundary = false;
+            break;
+          }
+        }
+
+        if (boundary) {
+          leftSquares.forEach((square) => square.classList.remove('available'));
+        } else if (
+          !game.P1OpenForPlacement(
+            curDraggedOverCoords[0],
+            curDraggedOverCoords.at(-1),
+          )
+        ) {
+          // eslint-disable-next-line no-shadow
+          for (let i = 0; i < leftSquares.length; i += 1) {
+            leftSquares[i].classList.remove('available');
+            if (!leftSquares.includes(sqsCurDraggedOver[i])) {
+              sqsCurDraggedOver[i].classList.remove('available');
+            }
+          }
+        } else {
+          leftSquares.forEach((square) => {
+            if (!sqsCurDraggedOver.includes(square)) {
+              square.classList.remove('available');
+            }
+          });
+        }
+      });
+
       playerOneRow[j].addEventListener('drop', (e) => {
         if (!P1Ready) {
           e.preventDefault();
@@ -359,11 +472,118 @@ function initialize(playerOneName, playerTwoName) {
           e.preventDefault();
         }
       });
+
       playerTwoRow[j].addEventListener('dragenter', (e) => {
         if (!P2Ready) {
           e.preventDefault();
+
+          // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+          const [shipLength, orientation, index] = currentlyDragged;
+
+          const newSquares = [];
+          // As on the board ('A', 3; 'B', 1 etc.)
+          const newCoords = [];
+
+          if (orientation === 'horizontal') {
+            // Check for not sticking out of the board's boundaries
+            for (let k = j - index; k < j - index + shipLength; k += 1) {
+              if (k > 9 || k < 0) return;
+            }
+
+            for (let k = j - index; k < j - index + shipLength; k += 1) {
+              newSquares.push(playerTwoRow[k]);
+              newCoords.push([letter, k + 1]);
+            }
+          } else {
+            // Check for not sticking out of the board's boundaries
+            for (let l = i - index; l < i - index + shipLength; l += 1) {
+              if (l > 9 || l < 0) return;
+            }
+
+            for (let l = i - index; l < i - index + shipLength; l += 1) {
+              newSquares.push(playerTwoRows[l].querySelectorAll('.square')[j]);
+              newCoords.push([letters[l], j + 1]);
+            }
+          }
+
+          currentlyDraggedOver = [[...newSquares], [...newCoords]];
+
+          if (game.P2OpenForPlacement(newCoords[0], newCoords.at(-1))) {
+            newSquares.forEach((square, k) => {
+              const coordOnBoard = newCoords[k];
+              square.classList.add('available');
+              addP2DragEventListener(square, coordOnBoard[0], coordOnBoard[1]);
+            });
+          }
         }
       });
+
+      playerTwoRow[j].addEventListener('dragleave', (e) => {
+        e.preventDefault();
+
+        // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+        const [shipLength, orientation, index] = currentlyDragged;
+
+        const leftSquares = [];
+
+        if (orientation === 'horizontal') {
+          // Check for not sticking out of the board's boundaries
+          for (let k = j - index; k < j - index + shipLength; k += 1) {
+            if (k > 9 || k < 0) return;
+          }
+
+          for (let k = j - index; k < j - index + shipLength; k += 1) {
+            leftSquares.push(playerTwoRow[k]);
+          }
+        } else {
+          // Check for not sticking out of the board's boundaries
+          for (let l = i - index; l < i - index + shipLength; l += 1) {
+            if (l > 9 || l < 0) return;
+          }
+
+          for (let l = i - index; l < i - index + shipLength; l += 1) {
+            leftSquares.push(playerTwoRows[l].querySelectorAll('.square')[j]);
+          }
+        }
+
+        const sqsCurDraggedOver = currentlyDraggedOver[0];
+        const curDraggedOverCoords = currentlyDraggedOver[1];
+
+        // This is for the case when a dragged ship has just met a boundary
+        let boundary = true;
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const square of leftSquares) {
+          if (!sqsCurDraggedOver.includes(square)) {
+            boundary = false;
+            break;
+          }
+        }
+
+        if (boundary) {
+          leftSquares.forEach((square) => square.classList.remove('available'));
+        } else if (
+          !game.P2OpenForPlacement(
+            curDraggedOverCoords[0],
+            curDraggedOverCoords.at(-1),
+          )
+        ) {
+          // eslint-disable-next-line no-shadow
+          for (let i = 0; i < leftSquares.length; i += 1) {
+            leftSquares[i].classList.remove('available');
+            if (!leftSquares.includes(sqsCurDraggedOver[i])) {
+              sqsCurDraggedOver[i].classList.remove('available');
+            }
+          }
+        } else {
+          leftSquares.forEach((square) => {
+            if (!sqsCurDraggedOver.includes(square)) {
+              square.classList.remove('available');
+            }
+          });
+        }
+      });
+
       playerTwoRow[j].addEventListener('drop', (e) => {
         if (!P2Ready) {
           e.preventDefault();
@@ -461,7 +681,6 @@ function initialize(playerOneName, playerTwoName) {
             if (game.whoseTurn !== game.playerOne) {
               playerTwoBoardEnemy.style.display = 'none';
 
-              console.log(game.winner);
               if (game.winner === null) {
                 handoverDialogTwo.show();
                 whoseTurnDOM.textContent = playerTwoName;

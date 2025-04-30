@@ -94,6 +94,6 @@ export default class Player {
     this.gameboard.changeShipPosition(coord1, coord2);
   };
 
-  openForPlacement = ([row, col], ...moreSquares) =>
-    this.gameboard.openForPlacement([row, col], ...moreSquares);
+  openForPlacement = (coord1, coord2) =>
+    this.gameboard.openForPlacement(coord1, coord2);
 }

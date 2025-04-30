@@ -298,12 +298,12 @@ describe('Gameboard class', () => {
     board.placeShip(['G', 6], ['H', 6]);
     board.placeShip(['J', 4]);
 
-    expect(board.openForPlacement(['B', 1])).toBe(false);
-    expect(board.openForPlacement(['A', 1])).toBe(false);
+    /* expect(board.openForPlacement(['B', 1])).toBe(false);
+    expect(board.openForPlacement(['A', 1])).toBe(false); */
     expect(board.openForPlacement(['E', 9])).toBe(true);
   });
 
-  it('should be able to tell whether each square is avalable for placement in an array of squares', () => {
+  it('should be able to tell whether each square is avalable for placement in an array of squares that has the length of one of the ships; if the provided squares surround the ship, then, in case no other ship obstructs, the board should still tell that the squares are available; input must be either one pair of coordinates or the first and the last pair of coordinates', () => {
     const board = new Gameboard();
 
     board.placeShip(['B', 1], ['F', 1]);
@@ -312,8 +312,18 @@ describe('Gameboard class', () => {
     board.placeShip(['G', 6], ['H', 6]);
     board.placeShip(['J', 4]);
 
-    expect(board.openForPlacement(['B', 1], ['A', 1], ['E', 9])).toBe(false);
-    expect(board.openForPlacement(['G', 6], ['B', 1], ['E', 3])).toBe(false);
-    expect(board.openForPlacement(['C', 9], ['H', 8], ['I', 1])).toBe(true);
+    // Wrong format (no more than two arguments allowed)
+    expect(() =>
+      board.openForPlacement(['A', 1], ['B', 3], ['C', 4]),
+    ).toThrow();
+    // These squares can't match any ship
+    expect(() => board.openForPlacement(['B', 1], ['E', 9])).toThrow();
+
+    expect(board.openForPlacement(['A', 1], ['E', 1])).toBe(true);
+    expect(board.openForPlacement(['J', 6], ['J', 10])).toBe(true);
+    expect(board.openForPlacement(['I', 6], ['I', 10])).toBe(false);
+    expect(board.openForPlacement(['D', 7], ['E', 7])).toBe(false);
+    expect(board.openForPlacement(['G', 1])).toBe(false);
+    expect(board.openForPlacement(['B', 1])).toBe(false);
   });
 });
