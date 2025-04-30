@@ -63,6 +63,8 @@ P2ReadyDialog.addEventListener('close', () => {
   }
 });
 
+let isOutOfBoundary;
+
 function initialize(playerOneName, playerTwoName) {
   const game = new Game(playerOneName, playerTwoName);
 
@@ -116,12 +118,14 @@ function initialize(playerOneName, playerTwoName) {
         let index = 0;
 
         const originalSquares = [];
+        const originalSquareNodes = [];
 
         coords.forEach((coord) => {
           const i = letters.indexOf(coord[0]);
           const j = coord[1] - 1;
           const squares = playerOneRows[i].querySelectorAll('.square');
           const square = squares[j];
+          originalSquareNodes.push(square);
           originalSquares.push([i, j]);
           if (square === e.target) index = count;
           const squareClone = square.cloneNode(true);
@@ -130,9 +134,9 @@ function initialize(playerOneName, playerTwoName) {
           count += 1;
         });
 
+        currentlyDragged = [...data, index, originalSquareNodes];
         data.push(index, originalSquares);
         dataList.setData('text/plain', JSON.stringify(data));
-        currentlyDragged = data;
 
         // Calculate offsets for drag image
         const rect = e.target.getBoundingClientRect();
@@ -189,12 +193,14 @@ function initialize(playerOneName, playerTwoName) {
         let index = 0;
 
         const originalSquares = [];
+        const originalSquareNodes = [];
 
         coords.forEach((coord) => {
           const i = letters.indexOf(coord[0]);
           const j = coord[1] - 1;
           const squares = playerTwoRows[i].querySelectorAll('.square');
           const square = squares[j];
+          originalSquareNodes.push(square);
           originalSquares.push([i, j]);
           if (square === e.target) index = count;
           const squareClone = square.cloneNode(true);
@@ -203,9 +209,9 @@ function initialize(playerOneName, playerTwoName) {
           count += 1;
         });
 
+        currentlyDragged = [...data, index, originalSquareNodes];
         data.push(index, originalSquares);
         dataList.setData('text/plain', JSON.stringify(data));
-        currentlyDragged = data;
 
         // Calculate offsets for drag image
         const rect = e.target.getBoundingClientRect();
@@ -247,7 +253,7 @@ function initialize(playerOneName, playerTwoName) {
         if (!P1Ready) {
           e.preventDefault();
 
-          // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+          // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares as nodes]]
           if (currentlyDragged === null) return;
           const [shipLength, orientation, index] = currentlyDragged;
 
@@ -290,7 +296,7 @@ function initialize(playerOneName, playerTwoName) {
       playerOneRow[j].addEventListener('dragleave', (e) => {
         e.preventDefault();
 
-        // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares' IDs]]
+        // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares as nodes]]
         if (currentlyDragged === null) return;
         const [shipLength, orientation, index] = currentlyDragged;
 
@@ -299,7 +305,10 @@ function initialize(playerOneName, playerTwoName) {
         if (orientation === 'horizontal') {
           // Check for not sticking out of the board's boundaries
           for (let k = j - index; k < j - index + shipLength; k += 1) {
-            if (k > 9 || k < 0) return;
+            if (k > 9 || k < 0) {
+              isOutOfBoundary = true;
+              return;
+            }
           }
 
           for (let k = j - index; k < j - index + shipLength; k += 1) {
@@ -308,7 +317,10 @@ function initialize(playerOneName, playerTwoName) {
         } else {
           // Check for not sticking out of the board's boundaries
           for (let l = i - index; l < i - index + shipLength; l += 1) {
-            if (l > 9 || l < 0) return;
+            if (l > 9 || l < 0) {
+              isOutOfBoundary = true;
+              return;
+            }
           }
 
           for (let l = i - index; l < i - index + shipLength; l += 1) {
@@ -321,11 +333,13 @@ function initialize(playerOneName, playerTwoName) {
 
         // This is for the case when a dragged ship has just met a boundary
         let boundary = true;
+        isOutOfBoundary = true;
 
         // eslint-disable-next-line no-restricted-syntax
         for (const square of leftSquares) {
           if (!sqsCurDraggedOver.includes(square)) {
             boundary = false;
+            isOutOfBoundary = false;
             break;
           }
         }
@@ -355,9 +369,6 @@ function initialize(playerOneName, playerTwoName) {
       });
 
       playerOneRow[j].addEventListener('drop', (e) => {
-        currentlyDragged = null;
-        currentlyDraggedOver = null;
-
         if (!P1Ready) {
           e.preventDefault();
 
@@ -421,6 +432,22 @@ function initialize(playerOneName, playerTwoName) {
             );
           }
         }
+      });
+
+      playerOneRow[j].addEventListener('dragend', (e) => {
+        e.preventDefault();
+
+        // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares as nodes]]
+        if (currentlyDragged === null) return;
+        const originalSquares = currentlyDragged[3];
+
+        // if the user tries to put the ship in incorrect place
+        if (isOutOfBoundary)
+          originalSquares.forEach((square) => square.classList.add('occupied'));
+
+        currentlyDragged = null;
+        currentlyDraggedOver = null;
+        isOutOfBoundary = false;
       });
 
       if (game.isP1SqOccupied(letter, j + 1)) {
@@ -546,7 +573,10 @@ function initialize(playerOneName, playerTwoName) {
         if (orientation === 'horizontal') {
           // Check for not sticking out of the board's boundaries
           for (let k = j - index; k < j - index + shipLength; k += 1) {
-            if (k > 9 || k < 0) return;
+            if (k > 9 || k < 0) {
+              isOutOfBoundary = true;
+              return;
+            }
           }
 
           for (let k = j - index; k < j - index + shipLength; k += 1) {
@@ -555,7 +585,10 @@ function initialize(playerOneName, playerTwoName) {
         } else {
           // Check for not sticking out of the board's boundaries
           for (let l = i - index; l < i - index + shipLength; l += 1) {
-            if (l > 9 || l < 0) return;
+            if (l > 9 || l < 0) {
+              isOutOfBoundary = true;
+              return;
+            }
           }
 
           for (let l = i - index; l < i - index + shipLength; l += 1) {
@@ -568,11 +601,13 @@ function initialize(playerOneName, playerTwoName) {
 
         // This is for the case when a dragged ship has just met a boundary
         let boundary = true;
+        isOutOfBoundary = true;
 
         // eslint-disable-next-line no-restricted-syntax
         for (const square of leftSquares) {
           if (!sqsCurDraggedOver.includes(square)) {
             boundary = false;
+            isOutOfBoundary = false;
             break;
           }
         }
@@ -602,9 +637,6 @@ function initialize(playerOneName, playerTwoName) {
       });
 
       playerTwoRow[j].addEventListener('drop', (e) => {
-        currentlyDragged = null;
-        currentlyDraggedOver = null;
-
         if (!P2Ready) {
           e.preventDefault();
 
@@ -667,6 +699,22 @@ function initialize(playerOneName, playerTwoName) {
             );
           }
         }
+      });
+
+      playerTwoRow[j].addEventListener('dragend', (e) => {
+        e.preventDefault();
+
+        // currentlyDragged = [length, orientation, index in the array of ship squares, [...original squares as nodes]]
+        if (currentlyDragged === null) return;
+        const originalSquares = currentlyDragged[3];
+
+        // if the user tries to put the ship in incorrect place
+        if (isOutOfBoundary)
+          originalSquares.forEach((square) => square.classList.add('occupied'));
+
+        currentlyDragged = null;
+        currentlyDraggedOver = null;
+        isOutOfBoundary = false;
       });
 
       if (game.isP2SqOccupied(letter, j + 1)) {
