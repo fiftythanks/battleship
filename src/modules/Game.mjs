@@ -196,18 +196,16 @@ export default class Game {
 
   P1ChangeShipPosition = (coord1, coord2) => {
     if (this.howManyTurns === 0) {
-      this.playerOne.changeShipPosition(coord1, coord2);
-    } else {
-      throw new Error('Game has already begun!');
+      return this.playerOne.changeShipPosition(coord1, coord2);
     }
+    throw new Error('Game has already begun!');
   };
 
   P2ChangeShipPosition = (coord1, coord2) => {
     if (this.howManyTurns === 0) {
-      this.playerTwo.changeShipPosition(coord1, coord2);
-    } else {
-      throw new Error('Game has already begun!');
+      return this.playerTwo.changeShipPosition(coord1, coord2);
     }
+    throw new Error('Game has already begun!');
   };
 
   P1OpenForPlacement = (coord1, coord2) =>

@@ -90,9 +90,8 @@ export default class Player {
     return this.gameboard.carrierCoords;
   }
 
-  changeShipPosition = (coord1, coord2) => {
+  changeShipPosition = (coord1, coord2) =>
     this.gameboard.changeShipPosition(coord1, coord2);
-  };
 
   openForPlacement = (coord1, coord2) =>
     this.gameboard.openForPlacement(coord1, coord2);
