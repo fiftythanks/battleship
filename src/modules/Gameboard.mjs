@@ -599,7 +599,7 @@ export default class Gameboard {
         i += 1
       ) {
         for (let j = col - 1; j <= col + 1; j += 1) {
-          if (
+          /* if (
             (this.rows[letters[i]] === undefined ||
               this.rows[letters[i]][j - 1] === undefined) &&
             j !== col1 - 1 &&
@@ -608,7 +608,7 @@ export default class Gameboard {
             i !== letters.indexOf(row1) + 1
           ) {
             throw new Error('Incorrect positioning!');
-          }
+          } */
           if (
             this.rows[letters[i]] !== undefined &&
             this.rows[letters[i]][j - 1] !== undefined &&

@@ -262,6 +262,8 @@ describe('Gameboard class', () => {
       ['G', 9],
       ['H', 9],
     ]);
+
+    expect(board.changeShipPosition(['I', 6], ['J', 6])).not.toBeNull();
   });
 
   it('is impossible to change the position of a ship to a position that is already occupied at least partially by another ship', () => {
