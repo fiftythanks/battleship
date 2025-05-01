@@ -51,8 +51,8 @@ P1ReadyDialog.addEventListener('close', () => {
 P2ReadyDialog.addEventListener('close', () => {
   P2Ready = true;
   playerTwoBoard.style.display = 'none';
-  playerTwoBoardEnemy.style.display = 'flex';
   handoverDialogOne.show();
+  playerTwoBoardEnemy.style.display = 'flex';
 
   for (let i = 0; i < 10; i += 1) {
     const row = playerTwoRows[i].querySelectorAll('.square');
