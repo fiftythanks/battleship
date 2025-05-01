@@ -169,7 +169,8 @@ form {
 .square.sunk {
   background: grey;
 }
-.board {
+.board,
+.board-enemy {
   position: relative;
 }
 #hand-over-one[open],
