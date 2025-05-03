@@ -95,4 +95,6 @@ export default class Player {
 
   openForPlacement = (coord1, coord2) =>
     this.gameboard.openForPlacement(coord1, coord2);
+
+  changeOrientation = (row, col) => this.gameboard.changeOrientation(row, col);
 }

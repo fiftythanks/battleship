@@ -460,6 +460,45 @@ function initialize(playerOneName, playerTwoName) {
         playerOneRow[j].classList.add('occupied');
       }
 
+      playerOneRow[j].addEventListener('click', () => {
+        if (!P1Ready && playerOneRow[j].classList.contains('occupied')) {
+          try {
+            // It outputs original coords and new coords. If it throws, it's impossible to change the orientation of the ship.
+            const output = game.P1ChangeOrientation(letter, j + 1);
+            const originalCoords = output[0];
+            const newCoords = output[1];
+            const originalSquares = originalCoords.map((coord) => {
+              const row = letters.indexOf(coord[0]);
+              const col = coord[1] - 1;
+
+              return playerOneRows[row].querySelectorAll('.square')[col];
+            });
+            const newSquares = newCoords.map((coord) => {
+              const row = letters.indexOf(coord[0]);
+              const col = coord[1] - 1;
+
+              return playerOneRows[row].querySelectorAll('.square')[col];
+            });
+
+            originalSquares.forEach((square) => {
+              // eslint-disable-next-line no-param-reassign
+              square.ondragstart = null;
+              square.setAttribute('draggable', 'false');
+              square.classList.remove('occupied', 'available');
+            });
+
+            newSquares.forEach((square, index) => {
+              const coordOnBoard = newCoords[index];
+              square.classList.add('occupied');
+              square.setAttribute('draggable', 'true');
+              addP1DragEventListener(square, coordOnBoard[0], coordOnBoard[1]);
+            });
+          } catch {
+            // Trigger some animation
+          }
+        }
+      });
+
       playerOneRowEnemy[j].addEventListener('click', () => {
         if (game.whoseTurn === game.playerTwo && game.winner === null) {
           try {
@@ -726,6 +765,45 @@ function initialize(playerOneName, playerTwoName) {
       if (game.isP2SqOccupied(letter, j + 1)) {
         playerTwoRow[j].classList.add('occupied');
       }
+
+      playerTwoRow[j].addEventListener('click', () => {
+        if (!P2Ready && playerTwoRow[j].classList.contains('occupied')) {
+          try {
+            // It outputs original coords and new coords. If it throws, it's impossible to change the orientation of the ship.
+            const output = game.P2ChangeOrientation(letter, j + 1);
+            const originalCoords = output[0];
+            const newCoords = output[1];
+            const originalSquares = originalCoords.map((coord) => {
+              const row = letters.indexOf(coord[0]);
+              const col = coord[1] - 1;
+
+              return playerTwoRows[row].querySelectorAll('.square')[col];
+            });
+            const newSquares = newCoords.map((coord) => {
+              const row = letters.indexOf(coord[0]);
+              const col = coord[1] - 1;
+
+              return playerTwoRows[row].querySelectorAll('.square')[col];
+            });
+
+            originalSquares.forEach((square) => {
+              // eslint-disable-next-line no-param-reassign
+              square.ondragstart = null;
+              square.setAttribute('draggable', 'false');
+              square.classList.remove('occupied', 'available');
+            });
+
+            newSquares.forEach((square, index) => {
+              const coordOnBoard = newCoords[index];
+              square.classList.add('occupied');
+              square.setAttribute('draggable', 'true');
+              addP2DragEventListener(square, coordOnBoard[0], coordOnBoard[1]);
+            });
+          } catch {
+            // Trigger some animation
+          }
+        }
+      });
 
       playerTwoRowEnemy[j].addEventListener('click', () => {
         if (game.whoseTurn === game.playerOne && game.winner === null) {

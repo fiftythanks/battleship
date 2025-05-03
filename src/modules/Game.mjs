@@ -213,4 +213,10 @@ export default class Game {
 
   P2OpenForPlacement = (coord1, coord2) =>
     this.playerTwo.openForPlacement(coord1, coord2);
+
+  P1ChangeOrientation = (row, col) =>
+    this.playerOne.changeOrientation(row, col);
+
+  P2ChangeOrientation = (row, col) =>
+    this.playerTwo.changeOrientation(row, col);
 }

@@ -855,4 +855,54 @@ export default class Gameboard {
 
     return true;
   };
+
+  changeOrientation = (row, col) => {
+    const occupation = this.isOccupied(row, col);
+    if (occupation !== null) {
+      const shipType = occupation.type;
+
+      // Serialization is for making a deep copy of the array
+      const originalCoords = JSON.parse(
+        JSON.stringify(this[`${shipType}Coords`]),
+      );
+
+      // It's a patrol boat
+      if (originalCoords.length === 1) {
+        return null;
+      }
+
+      const newCoords = [];
+      // Horizontal orientation
+      if (originalCoords[0][0] === originalCoords[1][0]) {
+        const { length } = originalCoords;
+        const firstLetter = originalCoords[0][0];
+        const firstLetterIndex = letters.indexOf(firstLetter);
+        const j = originalCoords[0][1];
+
+        for (
+          let i = firstLetterIndex;
+          i <= firstLetterIndex + length - 1;
+          i += 1
+        ) {
+          newCoords.push([letters[i], j]);
+        }
+
+        this.changeShipPosition(newCoords[0], newCoords.at(-1));
+      } else if (originalCoords[0][1] === originalCoords[1][1]) {
+        const { length } = originalCoords;
+        const firstLetter = originalCoords[0][0];
+        const firstCol = originalCoords[0][1];
+
+        for (let j = firstCol; j <= firstCol + length - 1; j += 1) {
+          newCoords.push([firstLetter, j]);
+        }
+
+        this.changeShipPosition(newCoords[0], newCoords.at(-1));
+      }
+
+      return [originalCoords, newCoords];
+    }
+
+    return null;
+  };
 }
