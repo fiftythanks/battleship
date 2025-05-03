@@ -34,6 +34,15 @@ module.exports = {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
+      {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
     ],
+  },
+  resolve: {
+    extensions: ['.mjs', '.js', '.json'],
   },
 };
